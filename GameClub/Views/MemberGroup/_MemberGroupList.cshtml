@@ -1,0 +1,81 @@
+﻿@model GameClub.ViewModels.MemberGroupListViewModel
+    @{ Html.RenderPartial("_MemberGroupListPageTable", Model);}
+<div class="text-center">
+    @Ajax.Pager(Model.MemberGroupListsPageLists, new PagerOptions { AutoHide = false, PageIndexParameterName = "PageIndex", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>" }).AjaxOptions(a => a.SetUpdateTargetId("MemberGroupListPageTable").SetDataFormId("SearchForm"))
+</div>
+<script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+    function OnDelSuccess() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除分组表成功!', 'success', 3000);
+            }, 1e3)
+        }
+    function OnDelFailure() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除分组表失败!', 'danger', 3000);
+            }, 1e3)
+    }
+    function DealInput(SortBy) {
+            $("[id=pageIndexInput]").each(function () { $(this).val("@Model.PageIndex") })
+            $("[id=CurrentSortInput]").each(function () { $(this).val("@Model.CurrentSort") })
+            $("[id=SortByInput]").each(function () { $(this).val(SortBy) })
+            $("[id=IsOrderByInput]").each(function () { $(this).val(true) })
+            $('#SearchForm').submit();
+        }
+    $(document).ready(
+        function DealLink() {
+            $("[id=EditLink]").each(function () { $(this).html("<i class='mdi mdi-pencil'></i>") })
+            $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+            $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            $("[id=pageIndexInput]").each(function () { $(this).val("@Model.PageIndex") })
+        }
+    );
+    function OnAddMemberGroupListSuccess() {
+        @if (!string.IsNullOrEmpty(ViewBag.Fault))
+        {
+            <text>
+            OnFault();
+            </text>
+        }
+        else
+        {
+            <text>
+        $('#AddMemberGroupListModal').modal("hide");
+        OnSuccess();
+            </text>
+        }
+        
+    }
+    function OnAddMemberGroupListFault() {
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('信息有误,请核对!', 'danger', 3000);
+        }, 1e3);
+
+    }
+
+    function OnSuccess() {
+        lightyear.loading('show');
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Success', 'success', 3000);
+            }, 1e3);
+    }
+    function OnFault() {
+        lightyear.loading('show');
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Fault', 'danger', 3000);
+            }, 1e3);
+    }
+</script>
+
+
+

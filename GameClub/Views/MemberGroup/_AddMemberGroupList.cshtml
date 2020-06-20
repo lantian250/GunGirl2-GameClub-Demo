@@ -1,0 +1,108 @@
+﻿@model GameClub.ViewModels.MemberGroupListViewModel
+@{
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "MemberGroupListPageTable",
+        Url = Url.Action("AddMemberGroupList","MemberGroup"),
+        OnSuccess = "OnAddMemberGroupListSuccess",
+        OnFailure = "OnAddMemberGroupListFault",
+    };
+}
+<div class="modal fade" id="AddMemberGroupListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增分组表信息</h4>
+            </div>
+            @using (Ajax.BeginForm(ajaxOptions))
+            {
+                @Html.HiddenFor(m => m.PageIndex)
+                @Html.HiddenFor(m => m.PageSize)
+                @Html.HiddenFor(m => m.Keyword)
+                @Html.HiddenFor(m => m.CurrentSort)
+                @Html.HiddenFor(m => m.SortBy)
+                @Html.Hidden("IsOrderBy", false)
+            <div class="modal-body">
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <label for="MemberGroupID" class="control-label">分组表ID：</label>
+                    <input type="text" class="form-control" id="MemberGroupID" name="MemberGroupID" value="@DateTime.Now.ToString("yyyyMMddHHmm")" readonly />
+                </div>
+                <div class="form-group">
+                    <label for="Type" class="control-label">类型：</label>
+                    <div>
+                        <select class="form-control" id="Type" name="Type" size="1">
+                            <option value="团本" selected>团本</option>
+                            <option value="团战">团战</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Sign" class="control-label">选择签到表：</label>
+                    <div>
+                        <select class="form-control" id="SignID" name="SignID" size="1">
+                            @if ((Model.SignLists == null) || (Model.SignLists.Count() == 0))
+                            {
+                                <option value="" selected>暂无可供用的签到表</option>
+                            }
+                            else
+                            {
+                                <option value="" selected>请选择</option>
+                                foreach (var item in Model.SignLists)
+                                {
+                                    <option value="@item.SignID">@item.SignID</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="MemberGroup" class="control-label">选择贡献表：</label>
+                    <div>
+                        <select class="form-control" id="ContributionID" name="ContributionID" size="1">
+                            @if ((Model.ContributionLists == null) || (Model.ContributionLists.Count() == 0))
+                            {
+                                <option value="" selected>暂无可供用的分组表</option>
+                            }
+                            else
+                            {
+                                <option value="" selected>请选择</option>
+                                foreach (var item in Model.ContributionLists)
+                                {
+                                    <option value="@item.ContributionID">@item.ContributionID</option>
+
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@*<script type="text/javascript">
+    function OnAddMemberGroupListSuccess() {
+        $('#AddContributionListModal').modal("hide");
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('添加分组信息成功!', 'success', 3000);
+        }, 1e3);
+    }
+    function OnAddMemberGroupListFault() {
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('添加分组信息失败或已存在该信息，请核对!', 'danger', 3000);
+        }, 1e3);
+
+    }
+</script>*@
+
+

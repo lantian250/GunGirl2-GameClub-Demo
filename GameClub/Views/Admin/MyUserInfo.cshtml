@@ -1,0 +1,48 @@
+﻿@model GameClub.ViewModels.MyUserInfoViewModel
+@{
+    ViewBag.Title = "个人信息";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        @using (Html.BeginForm("MyUserInfo", "admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div class="edit-avatar">
+                                <img class="img-avatar" width="264" height="264"
+                                     src="@Url.Action("GetImage", "Admin")" />
+                                <div class="avatar-divider"></div>
+                                <div class="edit-avatar-content">
+                                    <input id="file" type="file" name="Image" />
+                                    <p>选择一张你喜欢的图片。</p>
+                                </div>
+                            </div>
+                            <hr>
+                            @Html.ValidationSummary()
+                            <div class="form-group">
+                                <label for="username">用户ID</label>
+                                <input type="text" class="form-control" value="@Model.UserInfo.UserID" disabled="disabled" />
+                                <input type="text" class="hidden" name="UserId" id="username" value="@Model.UserInfo.UserID" />
+                            </div>
+                            <div class="form-group">
+                                <label for="nickname">用户昵称</label>
+                                <input type="text" class="form-control" name="UserName" id="nickname" placeholder="输入您的昵称" value="@Model.UserInfo.UserName">
+                            </div>
+                            <input type="submit" class="btn btn-primary" id="btnotify" value="保存">
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+@section script{}
+

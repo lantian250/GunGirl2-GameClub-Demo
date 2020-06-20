@@ -1,0 +1,53 @@
+﻿@model GameClub.ViewModels.AllUserInfoViewModel
+
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">编辑用户信息</h4>
+            </div>
+            @using (Html.BeginForm("Edit", "User", new {id=Model.PageID , returnUrl = Model.returnUrl, keyword = Model.keyword, Pagesize=Model.PageSize,Model.CurrentSort,Model.SortBy }, FormMethod.Post))
+            {
+                <input type="text" value="@ViewBag.UserID" name="oldUserID" class="hidden" />
+                <div class="modal-body">
+                    @Html.ValidationMessage("UserIDError")
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">用户ID：</label>
+                        <input type="text" class="form-control" id="UserID" name="UserID" value="@ViewBag.UserID" autocomplete="off">
+                    </div>
+                    @Html.ValidationMessage("UserName")
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">用户昵称：</label>
+                        <input type="text" class="form-control" id="UserName" name="UserName" value="@ViewBag.UserName" autocomplete="off">
+                    </div>
+                    @Html.ValidationMessage("AuthorityError")
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">用户权限：</label>
+                        <div>
+                            <select class="form-control" id="Authority" name="Authority" size="1">
+                                @foreach (var item in Model.Authorities)
+                                {
+                                    if (item.Number==Convert.ToInt32(ViewBag.Authority))
+                                    {
+                                        <option value="@item.Number" selected>@item.AuthorityString</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Number">@item.AuthorityString</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" href="@Url.Action("Index",new {id=Model.PageID,keyword=Model.keyword,pagesize=Model.PageSize,Model.SortBy,Model.CurrentSort})">关闭</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

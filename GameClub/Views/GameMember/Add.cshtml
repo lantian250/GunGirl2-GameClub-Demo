@@ -1,0 +1,65 @@
+﻿@model GameClub.ViewModels.GameMemberViewModel
+@{ 
+    int num = 0;
+}
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增团员</h4>
+            </div>
+            @using (Html.BeginForm("Add", "GameMember", new { pageid = Model.PageID,pagesize=Model.PageSize , keyword = Model.keyword,sortBy=Model.SortBy,currentsort=Model.CurrentSort, IsOrderBy = false }, FormMethod.Post))
+            {
+                <div class="modal-body">
+                    @Html.ValidationMessage("GameID")
+                    <div class="form-group">
+                        <label for="GameID" class="control-label">游戏ID：</label>
+                        <input type="text" class="form-control" id="GameID" name="GameID">
+                    </div>
+                    @Html.ValidationMessage("GameName")
+                    <div class="form-group">
+                        <label for="GameName" class="control-label">游戏昵称：</label>
+                        <input type="text" class="form-control" id="GameName" name="GameName">
+                    </div>
+                    <div class="form-group">
+                        <label for="Authority" class="control-label">社团职位：</label>
+                        <div>
+                            <select class="form-control" id="Authority" name="Authority" size="1">
+                                @foreach (var item in Model.GameAuthorities)
+                                {
+                                    num++;
+                                    if (num == Model.GameAuthorities.Count)
+                                    {
+                                        <option value="@item.Number" selected>@item.AuthorityString</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Number">@item.AuthorityString</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="JoinDate" class="control-label">加入日期：</label>
+                        <input class="form-control js-datepicker m-b-10" type="text" id="JoinDate" name="JoinDate" placeholder="yyyy-mm-dd"  data-date-format="yyyy-mm-dd" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly/>
+                    </div>
+                    <div class="form-group">
+                        <label for="CreateAccount" class="control-label">其他选项：</label>
+                        <label class="lyear-checkbox m-t-10">
+                            <input type="checkbox" value="true" name="CreateAccount">
+                            <span>同时为该团员创建账号</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

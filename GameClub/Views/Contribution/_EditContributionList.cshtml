@@ -1,0 +1,125 @@
+﻿@model GameClub.ViewModels.ContributionListViewModel
+@{
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "ContributionListPageTable",
+        Url = Url.Action("UpdateContributionList"),
+        OnSuccess = "OnEditContributionListSuccess",
+        OnFailure = "OnEditContributionListFault",
+    };
+}
+<div class="modal fade" id="EditContributionListModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">编辑贡献表信息</h4>
+            </div>
+            @using (Ajax.BeginForm(ajaxOptions))
+            {
+                @Html.HiddenFor(m => m.PageIndex)
+                @Html.HiddenFor(m => m.PageSize)
+                @Html.HiddenFor(m => m.Keyword)
+                @Html.HiddenFor(m => m.CurrentSort)
+                @Html.HiddenFor(m => m.SortBy)
+                @Html.Hidden("IsOrderBy", false)
+            <div class="modal-body">
+                @if (Model.ContributionList != null)
+                {
+                    <div class="form-group">
+                        <label for="ContributionID" class="control-label">贡献表ID：</label>
+                        <input type="text" class="form-control" id="ContributionID" name="ContributionID" value="@Model.ContributionList.ContributionID" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="Type" class="control-label">类型：</label>
+                        <input type="text" class="form-control" id="Type" name="Type" value="@Model.ContributionList.Type">
+                    </div>
+                    <div class="form-group">
+                        <label for="Time" class="control-label">持续活动时间长度(单位长度为秒)：</label>
+                        <input type="text" class="form-control" id="Time" name="Time" value="@Model.ContributionList.Time">
+                    </div>
+                    <div class="form-group">
+                        <label for="SignID" class="control-label">签到表：</label>
+                        <div>
+                            <select class="form-control" id="SignID" name="SignID" size="1">
+                                @if (Model.ContributionList.SignID != null)
+                                {
+                                    <option value="@Model.ContributionList.SignID" selected>@Model.ContributionList.SignID</option>
+                                }
+                                @if ((Model.SignLists == null) || (Model.SignLists.Count() == 0))
+                                {
+                                    <option value="">暂无可供用的签到表</option>
+                                }
+                                else
+                                {
+                                    <option value="">请选择</option>
+                                    foreach (var item in Model.SignLists)
+                                    {
+
+                                        <option value="@item.SignID">@item.SignID</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="MemberGroup" class="control-label">分组表：</label>
+                        <div>
+                            <select class="form-control" id="MemberGroupID" name="MemberGroupID" size="1">
+                                @if (Model.ContributionList.MemberGroupID != null)
+                                {
+                                    <option value="@Model.ContributionList.MemberGroupID" selected>@Model.ContributionList.MemberGroupID</option>
+                                }
+                                @if ((Model.MemberGroupLists == null) || (Model.MemberGroupLists.Count() == 0))
+                                {
+                                    <option value="">暂无可供用的分组表</option>
+                                }
+                                else
+                                {
+                                    <option value="">请选择</option>
+                                    foreach (var item in Model.MemberGroupLists)
+                                    {
+                                        <option value="@item.MemberGroupID">@item.MemberGroupID</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="CreateDateTime" class="control-label">创建时间：</label>
+                        <input type="text" class="form-control" id="CreateDateTime" name="CreateDateTime" value="@Model.ContributionList.CreateDateTime" readonly>
+                    </div>
+
+                }
+            </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function OnEditContributionListSuccess() {
+        $('#SearchForm').submit();
+        $('#EditContributionListModal').modal("hide");
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('保存贡献表信息成功!', 'success', 3000);
+        }, 1e3);
+    }
+    function OnEditContributionListFault() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('编辑贡献表信息失败，请检查输入信息!', 'danger', 3000);
+        }, 1e3);
+    }
+</script>
+<script src="~/Scripts/main.min.js"></script>

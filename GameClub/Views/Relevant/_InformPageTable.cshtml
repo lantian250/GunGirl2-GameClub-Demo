@@ -1,0 +1,33 @@
+﻿@model GameClub.ViewModels.InformMessageViewModel
+@{
+    int count = 0;
+}
+@if (Model.InformMessages != null && Model.InformMessages.Count() != 0)
+{
+    foreach (var item in Model.InformMessages)
+    {
+        count++;
+        <div class="col-sm-6 col-lg-3">
+            <div class="card">
+                <div class="card-header bg-success">
+                    <h4>@item.Title</h4>
+                    <ul class="card-actions">
+                        <li>
+                            @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除？", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", UpdateTargetId = "InformMessagePageTable", OnFailure = "OnDelFailure", Url = Url.Action("DelInformMessage", "Relevant", new { item.ID, Model.PageIndex, Model.Keyword }) }, new { id = "DelLink", title = "删除" })
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="card-body">
+                    <p>@item.Context</p>
+                    <p>@item.CreateTime</p>
+                </div>
+            </div>
+        </div>
+        if (count % 4 == 0)
+        {
+            <div class="clearfix"></div>
+        }
+    }
+}
+

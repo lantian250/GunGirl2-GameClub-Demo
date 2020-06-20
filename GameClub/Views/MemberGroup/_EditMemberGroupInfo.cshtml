@@ -1,0 +1,81 @@
+﻿@model GameClub.ViewModels.MemberGroupViewModel
+@{
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "MemberGroupInfoPageTable",
+        Url = Url.Action("UpdateMemberGroup"),
+        OnSuccess = "OnEditMemberGroupInfoSuccess",
+        OnFailure = "OnEditMemberGroupInfoFault",
+    };
+}
+<div class="modal fade" id="EditMemberGroupInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">编辑分组表信息</h4>
+            </div>
+            @using (Ajax.BeginForm(ajaxOptions))
+            {
+                @Html.HiddenFor(m => m.PageIndex)
+                @Html.HiddenFor(m => m.PageSize)
+                @Html.HiddenFor(m => m.Keyword)
+                @Html.HiddenFor(m => m.CurrentSort)
+                @Html.HiddenFor(m => m.SortBy)
+                @Html.Hidden("IsOrderBy", false)
+                <div class="modal-body">
+                    @if (Model.MemberGroup != null)
+                    {
+                        @Html.ValidationSummary()
+                        <div class="form-group">
+                            <label for="MemberGroupID" class="control-label">分组表ID：</label>
+                            <input type="text" class="form-control" id="MemberGroupID" name="MemberGroupID" value="@Model.MemberGroup.MemberGroupID" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="GameID" class="control-label">成员ID：</label>
+                            <input type="text" class="form-control" id="GameID" name="GameID" value="@Model.MemberGroup.GameID" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="GroupName" class="control-label">分配组：</label>
+                            <select class="form-control" id="GroupName" name="GroupName" size="1">
+
+                                <option value="猫组" selected>猫组</option>
+                                <option value="狗组">狗组</option>
+                                @if (Model.MemberGroupList != null && Model.MemberGroupList.Type.Equals("团本"))
+                                {
+                                    <option value="鱼组">鱼组</option>
+                                }
+                            </select>
+                        </div>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function OnEditMemberGroupInfoSuccess() {
+        $('#EditMemberGroupInfoModal').modal("hide");
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('保存分组表信息测试成功!', 'success', 3000);
+        }, 1e3);
+        $('#SearchForm').submit();
+    }
+    function OneEditMemberGroupInfoFault() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('编辑分组表信息失败!', 'danger', 3000);
+        }, 1e3);
+    }
+</script>
+<script src="~/Scripts/main.min.js"></script>

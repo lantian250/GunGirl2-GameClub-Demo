@@ -1,0 +1,82 @@
+﻿@model GameClub.ViewModels.SignListViewModel
+
+    @{ Html.RenderPartial("_signListsPageTable", Model);}
+<div class="text-center">
+    @Ajax.Pager(Model.signListsPageList, new PagerOptions { AutoHide = false, PageIndexParameterName = "pageID", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>" }).AjaxOptions(a => a.SetUpdateTargetId("signListsPageList").SetDataFormId("SearchForm"))
+</div>
+<script type="text/javascript">
+    function OnBegin() {
+        lightyear.loading('show');
+    }
+    function OnDelSuccess() {
+        $('#SearchForm').submit();
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('删除签到表成功!', 'success', 3000);
+        }, 1e3)
+    }
+    function OnDelFailure() {
+        $('#SearchForm').submit();
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('删除签到表失败!', 'danger', 3000);
+        }, 1e3)
+    }
+    $(document).ready(
+        function DealLink() {
+            $("[id=EditLink]").each(function () { $(this).html("<i class='mdi mdi-pencil'></i>") })
+            $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+            $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            $("[id=pageIdInput]").each(function () { $(this).val("@Model.pageID") })
+        }
+    );
+    function DealInput() {
+            $("[id=pageIdInput]").each(function () { $(this).val("@Model.pageID") })
+            $("[id=CurrentSortInput]").each(function () { $(this).val("@Model.CurrentSort") })
+            $("[id=SortByInput]").each(function () { $(this).val("@Model.SortBy") })
+            $('#SearchForm').submit();
+            }
+
+    function OnAddSignListSuccess() {
+        @if (!string.IsNullOrEmpty(ViewBag.Fault))
+        {
+            <text>
+            OnFault();
+            </text>
+        }
+        else
+        {
+            <text>
+        $('#AddSignListModal').modal('hide');
+        OnSuccess();
+            </text>
+        }
+        
+    }
+    function OnAddSignListFault() {
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('信息有误,请核对!', 'danger', 3000);
+        }, 1e3);
+
+    }
+
+    function OnSuccess() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Success', 'success', 3000);
+            }, 1e3);
+    }
+    function OnFault() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Fault', 'danger', 3000);
+            }, 1e3);
+    }
+
+</script>

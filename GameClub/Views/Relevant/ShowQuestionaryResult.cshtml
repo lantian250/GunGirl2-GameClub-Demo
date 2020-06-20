@@ -1,0 +1,131 @@
+﻿@using GameClub.Models
+@model GameClub.ViewModels.QuestionaryViewModel
+@{
+    Layout = null;
+    FillOut fillOut;
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>@Model.Questionary.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/style.min.css" rel="stylesheet">
+    <link href="~/Scripts/jconfirm/jquery-confirm.min.css" />
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <aside class="lyear-layout-sidebar hidden">
+                <div class="lyear-layout-sidebar-scroll hidden">
+                </div>
+            </aside>
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>@Model.Questionary.Title</h4>
+                                <a class="btn btn-primary m-r-5 pull-right" href="@Url.Action("ExportQuestionary","Relevant",new {QuestionaryID=Model.Questionary.QuestionaryID })"><i class="mdi mdi-file-export"></i>导出该调查表</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>游戏ID</th>
+                                                <th>游戏昵称</th>
+                                                @foreach (var item in Model.Questions)
+                                                {
+                                                    <th colspan="@(Model.Selects.Where(s=>s.QuestionID==item.QuestionID).Count())">@item.QuestionContext</th>
+                                                }
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="2">选项值</td>
+                                                @foreach (var item in Model.Questions)
+                                                {
+                                                    foreach (var items in Model.Selects.Where(s => s.QuestionID == item.QuestionID).OrderBy(s => s.SelectID))
+                                                    {
+                                                        if (items.Type)
+                                                        {
+                                                            <td>其他</td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>@items.Value</td>
+                                                        }
+
+                                                    }
+                                                }
+                                            </tr>
+
+
+                                            @foreach (var GameID in Model.FillOuts.Select(f => f.GameID).Distinct())
+                                            {
+                                                <tr>
+                                                    <td>@GameID</td>
+                                                    <td>@Model.GetGameName(GameID)</td>
+                                                    @foreach (var item in Model.Questions)
+                                                    {
+                                                        foreach (var items in Model.Selects.Where(s => s.QuestionID == item.QuestionID).OrderBy(s => s.SelectID))
+                                                        {
+                                                            fillOut = Model.FillOuts.Where(f => f.GameID == GameID && f.SelectID == items.SelectID).FirstOrDefault();
+                                                            if (fillOut != null)
+                                                            {
+                                                                if (items.Type)
+                                                                {
+                                                                    <td>@fillOut.Value</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>√</td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>×</td>
+                                                            }
+                                                        }
+                                                    }
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <footer class="card-footer"></footer>
+                        </div>
+                    </div>
+                </div>
+                <div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/perfect-scrollbar.min.js"></script>
+    <script src="~/Scripts/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/lightyear.js"></script>
+    <script type="text/javascript" src="~/Scripts/main.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <script type="text/javascript" src="~/Content/wangEditor/wangEditor.min.js"></script>
+    <script type="text/javascript">
+    </script>
+</body>
+</html>
+

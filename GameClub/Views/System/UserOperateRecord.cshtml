@@ -1,0 +1,49 @@
+﻿@using GameClub.Models
+@model PagedList<UserOperateRecord>
+@{
+    ViewBag.Title = "用户操作历史记录";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "UserOperateRecordPageTable",
+        Url = Url.Action("UserOperateRecord", "Admin"),
+    };
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-toolbar clearfix row">
+                        <div class="col-md-4">
+                            <h4>用户操作历史记录</h4>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="pull-right search-bar">
+                                @using (Ajax.BeginForm(null, null, ajaxOptions, new { id = "SearchForm" }))
+                                {
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="留空搜索展示所有数据" value="">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-secondary" id="search-btn" type="submit" accesskey="on"><i class="mdi mdi-search-web"></i> 搜索</button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="UserOperateRecordPageTable"  class="table-responsive">
+                            @Html.Partial("_UserOperateRecord", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+}

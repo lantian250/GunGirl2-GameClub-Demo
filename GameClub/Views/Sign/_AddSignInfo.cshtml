@@ -1,0 +1,132 @@
+﻿@model GameClub.ViewModels.SignInfoViewModel
+@{
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "SignInfoPageTable",
+        Url = Url.Action("AddSignInfo"),
+        OnSuccess = "OnAddSignInfoSuccess",
+        OnFailure = "OnAddSignInfoFault",
+    };
+}
+<div class="modal fade" id="AddSignInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增签到表信息</h4>
+            </div>
+            @using (Ajax.BeginForm(ajaxOptions))
+            {
+                @Html.HiddenFor(m => m.PageID)
+                @Html.HiddenFor(m => m.PageSize)
+                @Html.HiddenFor(m => m.Keyword)
+                @Html.HiddenFor(m => m.CurrentSort)
+                @Html.HiddenFor(m => m.SortBy)
+                @Html.Hidden("IsOrderBy", false)
+                <div class="modal-body">
+                    @Html.ValidationSummary()
+                    <div class="form-group">
+                        <label for="SignID" class="control-label">选择签到表ID：</label>
+                        <div>
+                            <select class="form-control" id="SignID" name="SignID" size="1" onchange="OnSelect()">
+                                @if (Model.SignLists != null)
+                                {
+                                    <option value="" selected>请选择</option>
+                                    foreach (var item in Model.SignLists)
+                                    {
+                                        <option value="@item.SignID">@item.SignID</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="" selected>暂时没有可选的签到表</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="GameMember" hidden>
+                        @Html.Partial("_GameMember", Model)
+                    </div>
+                    <div class="form-group">
+                        <label for="SignCondition" class="control-label">签到情况：</label>
+                        <div>
+                            <select class="form-control" id="SignCondition" name="SignCondition" size="1">
+                                <option value="未签到" selected>未签到</option>
+                                <option value="不能语音" >不能语音</option>
+                                <option value="能语音">能语音</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="SignDatetime" class="control-label">签到时间：</label>
+                        <input class="form-control js-datetimepicker m-b-10" type="text" id="SignDatetime" autocomplete="off" name="SignDatetime" placeholder="请选择具体时间" data-side-by-side="true" data-locale="zh-cn" data-format="YYYY-MM-DD HH:mm" />
+                    </div>
+                    <div class="form-group">
+                        <label for="VoiceCondition" class="control-label">语音情况：</label>
+                        <div>
+                            <select class="form-control" id="VoiceCondition" name="VoiceCondition" size="1">
+                                <option value="未语音" selected>未语音</option>
+                                <option value="语音">语音</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Active" class="control-label">是否请假：</label>
+                        <div>
+                            <select class="form-control" id="IsLeave" name="IsLeave" size="1">
+                                <option value="false" selected>未请假</option>
+                                <option value="true">请假</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Deal" class="control-label">处理：</label>
+                        <input type="text" class="form-control" id="Deal" name="Deal" value="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+            @using (Ajax.BeginForm("", null, null, new AjaxOptions { UpdateTargetId= "GameMember", OnSuccess = "OnSelectSuccess", Url = Url.Action("GetAddGameMember", "Sign") }, new { id = "GetGameMemberSubmit" }))
+            {
+                <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.PageSize" />
+                <input hidden type="text" name="pageId" id="pageIdInput" value="@Model.PageID" />
+                <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+                <input hidden type="text" name="SignID" id="AddGameID"  value=""/>
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function OnAddSignInfoSuccess() {
+        $('#SearchForm').submit();
+        $('#AddSignInfoModal').modal('hide');
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('添加签到信息成功!', 'success', 3000);
+        }, 1e3);
+        
+    }
+    function OnAddSignInfoFault() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('添加签到信息失败或已存在该信息，请核对!', 'danger', 3000);
+        }, 1e3);
+    }
+    function OnSelect() {
+        var SignID = $('#SignID').val();
+        $('#AddGameID').val(SignID);
+        $('#GetGameMemberSubmit').submit();
+    }
+    function OnSelectSuccess() {
+        $('#GameMember').show();
+    }
+</script>
+<script type="text/javascript" src="~/Scripts/main.min.js"></script>

@@ -1,0 +1,157 @@
+﻿@model GameClub.ViewModels.MemberGroupViewModel
+
+@{
+    ViewBag.Title = "社团分组表信息管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "MemberGroupInfoPageTable",
+        Url = Url.Action("MemberGroupManage"),
+        //OnBegin = "OnBegin",
+        //OnSuccess = "OnSearchSuccess",
+        //OnFailure = "OnSearchFailure",
+    };
+    AjaxOptions ajaxOptionAdd = new AjaxOptions
+    {
+        UpdateTargetId = "AddMemberGroupInfo",
+        Url = Url.Action("GetAddMemberGroupInfo"),
+        //OnBegin = "OnBegin",
+        OnSuccess = "GetAddModal",
+        //OnFailure = "OnSearchFailure",
+    };
+    AjaxOptions DealTable = new AjaxOptions
+    {
+        Url = Url.Action("DealMemberGroup"),
+        OnBegin = "OnBegin",
+        Confirm = "确定是否删除！",
+        OnSuccess = "OnDealListSuccess",
+        UpdateTargetId = "MemberGroupInfoPageTable"
+
+    };
+}
+
+@section main{
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-toolbar clearfix">
+                    <div class="pull-right search-bar">
+                        @using (Ajax.BeginForm(null, null, ajaxOptions, new { id = "SearchForm" }))
+                        {
+                            <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.PageSize" />
+                            <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                            <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                            <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                            <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="留空搜索展示所有内容" value="@Model.Keyword">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-secondary" id="search-btn" type="submit" accesskey="on"><i class="mdi mdi-search-web"></i> 搜索</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="toolbar-btn-action">
+                        @using (Ajax.BeginForm(null, null, ajaxOptionAdd, new { id = "AddForm" }))
+                        {
+                            <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.PageSize" />
+                            <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                            <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                            <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                            <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+                        }
+                        @*@Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetAddSignList", new { Model.pageID, Model.pageSize, Model.keyword }), UpdateTargetId = "AddSignList", OnSuccess = "GetAddModal" }, new { id = "AddLink", type = "button", @class = "btn btn-primary m-r-5" })*@
+                        <button type="button" name="formsubmit" class="btn btn-primary m-r-5" onclick="AddSubmit()"><i class="mdi mdi mdi-plus"></i> 新增</button>
+                        <button type="button" name="formsubmit" class="btn btn-danger m-r-5" onclick="TableSubmit('删除');" value="删除"><i class="mdi mdi-window-close"></i> 删除</button>
+                        <div class="btn-group">
+                            <button type="button" id="PageSizeMenu" class="btn btn-secondary dr/opdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                单页显示数量:@(Model.PageSize)条 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="PageSize(20)">20条</a></li>
+                                <li><a onclick="PageSize(30)">30条</a></li>
+                                <li><a onclick="PageSize(50)">50条</a></li>
+                                <li><a onclick="PageSize(100)">100条</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @using (Ajax.BeginForm(null, null, DealTable, new { id = "TableForm" }))
+                    {
+                        <input hidden type="text" name="DealAction" id="DealAction" />
+                        <div id="MemberGroupInfoPageTable"  class="table-responsive">
+                            @Html.Partial("_MemberGroupInfo", Model)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="AddMemberGroupInfo">
+        @Html.Partial("_AddMemberGroupInfo", Model)
+    </div>
+    <div id="EditMemberGroupInfo">
+        @Html.Partial("_EditMemberGroupInfo", Model)
+    </div>
+</div>
+}
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+
+    <script type="text/javascript">
+
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnSearchSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('查询成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnSearchFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('查询失败!', 'danger', 3000);
+            }, 1e3)
+        }
+        function GetAddModal() {
+            $('#AddMemberGroupInfoModal').modal("show")
+        }
+        function GetEditModal() {
+            $('#EditMemberGroupInfoModal').modal("show")
+        }
+        function AddSubmit() {
+            $('#AddForm').submit();
+        }
+        function PageSize(pagesize) {
+            $('#PageSizeMenu').html("单页显示数量:" + pagesize + "条 <span class='caret'></span>")
+            $("[id=PageSizeInput]").each(function () { $(this).val(pagesize) })
+            $('#SearchForm').submit();
+        }
+        function TableSubmit(Action) {
+            $('#DealAction').val(Action);
+            $('#TableForm').submit();
+        }
+        function OnDealListSuccess() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('操作成功!', 'success', 3000);
+            }, 1e3)
+        }
+        $(document).ready(
+            function DealLink() {
+                $("[id=EditLink]").each(function () { $(this).html("<i class='mdi mdi-pencil'></i>") })
+                $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+                $("[id=AddLink]").each(function () { $(this).html("<i class='mdi mdi-plus'></i> 新增") })
+                $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            }
+        );
+    </script>
+
+}
+

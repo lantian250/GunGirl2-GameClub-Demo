@@ -1,0 +1,168 @@
+﻿@model List<GameClub.Models.GameAuthority>
+@{
+    ViewBag.Title = "Authority";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 1;
+    string[] color = { "primary", "info", "danger", "dark", "secondary", "success", "warning", };
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header"><h3>社团职位信息</h3></div>
+                    <div class="card-body">
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            @foreach (var item in Model)
+                            {
+                                <div class="panel panel-@color[count++%7]">
+                                    <div class="panel-heading" role="tab" id="heading-@item.Number">
+                                        <h4 class="panel-title">
+                                            @if (item.Number.Equals(TempData["ShowNumber"]) || ((TempData["ShowNumber"] == null) && (TempData["ShowAdd"] == null) && ((count - 1) == 1)))
+                                            {
+                                                <a>职位编号：@item.Number 职位名称：@item.AuthorityString</a>
+
+                                                <a href="@Url.Action("DelAuthority",new { number=item.Number})" onclick="return confirm('确定是否删除?');" title="删除" data-toggle="tooltip" class="pull-right"><i class="mdi mdi-22px mdi-close-box"></i></a>
+                                                <a class="pull-right" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-@item.Number" aria-expanded="true" aria-controls="collapse-@item.Number">
+
+                                                    <i class="mdi mdi-22px mdi-pencil"></i>
+                                                </a>
+
+                                            }
+                                            else
+                                            {
+                                                <a>职位编号：@item.Number 职位名称：@item.AuthorityString</a>
+
+                                                <a href="@Url.Action("DelAuthority",new { number=item.Number})" onclick="return confirm('确定是否删除?');" title="删除" data-toggle="tooltip" class="pull-right"><i class="mdi mdi-20px mdi-close-box"></i></a>
+                                                <a class="collapsed pull-right" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-@item.Number" aria-expanded="false" aria-controls="collapse-@item.Number">
+
+                                                    <i class="mdi mdi-22px mdi-pencil"></i>
+                                                </a>
+                                            }
+                                        </h4>
+                                    </div>
+
+                                    @if (item.Number.Equals(TempData["ShowNumber"]) || ((TempData["ShowNumber"] == null) && TempData["ShowAdd"] == null && ((count - 1) == 1)))
+                                    {
+                                        <div id="collapse-@item.Number" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-@item.Number">
+                                            <div class="panel-body">
+                                                @using (Html.BeginForm("UpdateAuthority", "GameMember", FormMethod.Post))
+                                                {
+                                                    @Html.ValidationSummary(true)
+                                                    <div class="form-group">
+                                                        <p>职位编号:</p>
+                                                        @Html.Hidden("Number", item.Number)
+                                                        <input class="form-control" type="text" value="@item.Number" disabled />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <p>职位名称:</p>
+                                                        <input class="form-control" name="AuthorityString" type="text" value="@item.AuthorityString" />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="submit" class="btn btn-primary" value="保存">
+                                                    </div>
+
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="collapse-@item.Number" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-@item.Number">
+                                            <div class="panel-body">
+                                                @{Html.BeginForm("UpdateAuthority", "GameMember", FormMethod.Post);}
+                                                @Html.ValidationSummary(true)
+                                                <div class="form-group">
+                                                    <p>职位编号:</p>
+                                                    @Html.Hidden("Number", item.Number)
+                                                    <input class="form-control" type="text" value="@item.Number" disabled />
+                                                </div>
+                                                <div class="form-group">
+                                                    <p>职位名称:</p>
+                                                    <input class="form-control" name="AuthorityString" type="text" value="@item.AuthorityString" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="submit" class="btn btn-primary" value="保存">
+                                                </div>
+
+                                                @{Html.EndForm();}
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                            }
+                            @if (TempData["ShowAdd"] != null)
+                            {
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading" role="tab" id="heading-add">
+                                        <h4 class="panel-title">
+                                            <a>添加职位信息</a>
+                                            <a class="collapsed pull-right" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-add" aria-expanded="true" aria-controls="collapse-add">
+
+                                                <i class="mdi mdi-22px mdi-plus-box"></i>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-add" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-add">
+                                        <div class="panel-body">
+                                            @{Html.BeginForm("AddAuthority", "GameMember", FormMethod.Post);}
+                                            @Html.ValidationSummary()
+                                            <div class="form-group">
+                                                <p>职位编号:</p>
+                                                <input class="form-control" name="Number" type="text" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <p>职位名称:</p>
+                                                <input class="form-control" name="AuthorityString" type="text" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" class="btn btn-primary" value="添加">
+                                            </div>
+                                            @{Html.EndForm();}
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading" role="tab" id="heading-add">
+                                        <h4 class="panel-title">
+                                            <a>添加职位信息</a>
+                                            <a class="collapsed pull-right" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse-add" aria-expanded="false" aria-controls="collapse-add">
+
+                                                <i class="mdi mdi-22px mdi-plus-box"></i>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse-add" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading-add">
+                                        <div class="panel-body">
+                                            @{Html.BeginForm("AddAuthority", "GameMember", FormMethod.Post);}
+                                            @Html.ValidationSummary()
+                                            <div class="form-group">
+                                                <p>职位编号:</p>
+                                                <input class="form-control" name="Number" type="text" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <p>职位名称:</p>
+                                                <input class="form-control" name="AuthorityString" type="text" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="submit" class="btn btn-primary" value="添加">
+                                            </div>
+                                            @{Html.EndForm();}
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section script{
+}

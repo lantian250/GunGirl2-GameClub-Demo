@@ -1,0 +1,15 @@
+﻿@using GameClub.Models;
+@model PagedList<GameMember>
+    @{ Html.RenderPartial("_GameMemberPageTable", Model);}
+<div class="text-center">
+    @Ajax.Pager(Model, new PagerOptions { AutoHide = false, PageIndexParameterName = "PageIndex", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>" }).AjaxOptions(a => a.SetUpdateTargetId("MemberGroupListPageTable").SetDataFormId("SearchForm"))
+</div>
+
+<script type="text/javascript">
+    $(document).ready(
+            function DealLink() {
+                $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+                $("[id=ResetLink]").each(function () { $(this).html("<i class='mdi mdi-lock-reset'></i>") })
+            }
+        );
+</script>

@@ -1,0 +1,252 @@
+﻿@model List<GameClub.Models.Authority>
+@{
+    ViewBag.Title = "权限管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string[] color = { "success", "warning", "primary", "info", "danger", "dark", "secondary" };
+    int count = 0;
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card ">
+                        <div class="card-header bg-@color[count++%color.Length]">
+                            <h4>权重编号:@item.Number</h4>
+                            <ul class="card-actions">
+                                <li>
+                                    <a href="@Url.Action("DelAuthority",new { number=item.Number})" onclick="return confirm('确定是否删除?');" title="删除" data-toggle="tooltip"><i class="mdi mdi-24px mdi-close-box"></i></a>
+                                    <a href="@Url.Action("EditAuthority",new { number=item.Number})" title="修改" data-toggle="tooltip"><i class="mdi mdi-24px mdi mdi-pencil"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <p>职权名称：@item.AuthorityString</p>
+                            <p>拥有职能：</p>
+                            @if (item.UserManage == true)
+                            {
+                                <label class="lyear-checkbox  checkbox-primary">
+                                    <input type="checkbox" checked disabled><span>用户管理</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="lyear-checkbox  checkbox-primary">
+                                    <input type="checkbox" disabled><span>用户管理</span>
+                                </label>
+                            }
+                            @if (item.GameMemberManage == true)
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" checked disabled><span>社团团员管理</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" disabled><span>社团团员管理</span>
+                                </label>
+                            }
+                            @if (item.SignManage == true)
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" checked disabled><span>社团签到管理</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" disabled><span>社团签到管理</span>
+                                </label>
+                            }
+                            @if (item.ContributionManage == true)
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" checked disabled><span>社团贡献管理</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" disabled><span>社团贡献管理</span>
+                                </label>
+                            }
+                            @if (item.MemberGroupManage == true)
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" checked disabled><span>社团分组管理</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" disabled><span>社团分组管理</span>
+                                </label>
+                            }
+                            @if (item.RelevantManage == true)
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" checked disabled><span>社团相关管理</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                    <input type="checkbox" disabled><span>社团相关管理</span>
+                                </label>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+            @using (Html.BeginForm("AddAuthority", "User", FormMethod.Post))
+            {
+                <div class="col-sm-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-header bg-success">
+                            <h4>添加职权</h4>
+                            <ul class="card-actions">
+                                <li>
+                                    <button type="submit" title="添加" data-toggle="tooltip" class="btn btn-success" value="添加职权"><i class="mdi mdi-24px mdi-plus-box"></i></button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            @Html.ValidationSummary()
+                            <p>职权编号：</p>
+                            <input type="text" name="Number" class="form-control" autocomplete="off"/>
+                            <p>职权名称：</p>
+                            <input type="text" name="AuthorityString" class="form-control" autocomplete="off"/>
+                        </div>
+                    </div>
+                </div>
+            }
+            @using (Html.BeginForm("EditAuthority", "User"))
+            {
+                <div class="modal fade" id="EditAuthorityModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="exampleModalLabel">编辑职权信息</h4>
+                            </div>
+                            <div class="modal-body">
+                                @Html.ValidationSummary()
+                                @if (ViewBag.Number != 1)
+                                {
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="control-label">编号：</label>
+                                        <input type="text" name="Number" value="@ViewBag.Number" class="hidden" />
+                                        <input type="text" class="form-control" value="@ViewBag.Number" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="control-label">职权名称：</label>
+                                        <input type="text" class="form-control" name="AuthorityString" value="@ViewBag.AuthorityString" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        @if (ViewBag.UserManage == true)
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary">
+                                                <input type="checkbox" name="UserManage" value="true" checked><span>用户管理</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary">
+                                                <input type="checkbox" name="UserManage" value="true"><span>用户管理</span>
+                                            </label>
+                                        }
+                                        @if (ViewBag.GameMemberManage == true)
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="GameMemberManage" value="true" checked><span>社团成员管理</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="GameMemberManage" value="true"><span>社团成员管理</span>
+                                            </label>
+                                        }
+                                        @if (ViewBag.SignManage == true)
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="SignManage" value="true" checked><span>社团签到管理</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="SignManage" value="true"><span>社团签到管理</span>
+                                            </label>
+                                        }
+                                        @if (ViewBag.ContributionManage == true)
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="ContributionManage" value="true" checked><span>社团贡献管理</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="ContributionManage" value="true"><span>社团贡献管理</span>
+                                            </label>
+                                        }
+                                        @if (ViewBag.MemberGroupManage == true)
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="MemberGroupManage" value="true" checked><span>社团分组管理</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="MemberGroupManage" value="true"><span>社团分组管理</span>
+                                            </label>
+                                        }
+                                        @if (ViewBag.RelevantManage == true)
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="RelevantManage" value="true" checked><span>社团相关管理</span>
+                                            </label>
+                                        }
+                                        else
+                                        {
+                                            <label class="lyear-checkbox  checkbox-primary m-t-5">
+                                                <input type="checkbox" name="RelevantManage" value="true"><span>社团相关管理</span>
+                                            </label>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <p>禁止修改管理员权限！</p>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                                @if (ViewBag.Number != 1)
+                                {
+                                    <button type="submit" class="btn btn-primary">保存</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@section script{
+    @if (ViewBag.EditAuthorityModal != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function EditModel() {
+                $('#EditAuthorityModal').modal("show");
+            })
+        </script>
+    }
+}

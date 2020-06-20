@@ -1,0 +1,726 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7B4BE569-C4B0-4B63-8E06-5D811931474F}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GameClub</RootNamespace>
+    <AssemblyName>GameClub</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>3.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.6.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.8.6\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.2.0.246, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.2.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.3.3.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.3\lib\net45\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.3.0\lib\net45\Ninject.Web.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Common.WebHost, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.WebHost.3.3.0\lib\net45\Ninject.Web.Common.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.3.0\lib\net45\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.5.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.1\lib\net45\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.5.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.1\lib\net45\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.5.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.1\lib\net45\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.5.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NPOI.2.5.1\lib\net45\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Extensions, Version=2.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives, Version=4.2.29.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Webdiyer.MvcPager, Version=3.0.2015.802, Culture=neutral, PublicKeyToken=f6872c5a09aed72c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Webdiyer.MvcPager.3.0.1.1\lib\Webdiyer.MvcPager.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\animate.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\ErrorStyles.css" />
+    <Content Include="Content\fonts\materialdesignicons.svg" />
+    <Content Include="Content\images\captcha.png" />
+    <Content Include="Content\images\ico-min.jpg" />
+    <Content Include="Content\images\img-slide-1.jpg" />
+    <Content Include="Content\images\img-slide-2.jpg" />
+    <Content Include="Content\images\img-slide-3.jpg" />
+    <Content Include="Content\images\img-slide-4.jpg" />
+    <Content Include="Content\images\img-slide-5.jpg" />
+    <Content Include="Content\images\logo-ico.png" />
+    <Content Include="Content\images\logo-sidebar.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\users\avatar.png" />
+    <Content Include="Content\materialdesignicons.min.css" />
+    <Content Include="Content\wangEditor\wangEditor.css" />
+    <Content Include="Content\wangEditor\wangEditor.js" />
+    <Content Include="Content\wangEditor\wangEditor.min.css" />
+    <Content Include="Content\wangEditor\wangEditor.min.js" />
+    <Content Include="Content\style.min.css" />
+    <Content Include="fonts\materialdesignicons.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Models\Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.cs</LastGenOutput>
+    </Content>
+    <Content Include="Scripts\bootstrap-colorpicker\bootstrap-colorpicker.js" />
+    <Content Include="Scripts\bootstrap-colorpicker\bootstrap-colorpicker.min.js" />
+    <Content Include="Scripts\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
+    <Content Include="Scripts\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css" />
+    <Content Include="Scripts\bootstrap-colorpicker\img\bootstrap-colorpicker\alpha-horizontal.png" />
+    <Content Include="Scripts\bootstrap-colorpicker\img\bootstrap-colorpicker\alpha.png" />
+    <Content Include="Scripts\bootstrap-colorpicker\img\bootstrap-colorpicker\hue-horizontal.png" />
+    <Content Include="Scripts\bootstrap-colorpicker\img\bootstrap-colorpicker\hue.png" />
+    <Content Include="Scripts\bootstrap-colorpicker\img\bootstrap-colorpicker\saturation.png" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker3.css" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker3.min.css" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ar.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.az.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.bg.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.bs.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ca.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.cs.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.cy.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.da.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.de.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.el.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.en-AU.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.en-GB.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.eo.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.es.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.et.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.eu.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.fa.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.fi.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.fo.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.fr-CH.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.fr.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.gl.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.he.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.hr.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.hu.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.hy.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.id.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.is.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.it-CH.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.it.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ja.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ka.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.kh.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.kk.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ko.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.kr.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.lt.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.lv.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.me.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.mk.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.mn.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ms.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.nb.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.nl-BE.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.nl.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.no.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.pl.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.pt-BR.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.pt.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ro.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.rs-latin.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.rs.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.ru.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.sk.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.sl.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.sq.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.sr-latin.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.sr.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.sv.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.sw.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.th.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.tr.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.uk.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.vi.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\bootstrap-datetimepicker.css" />
+    <Content Include="Scripts\bootstrap-datetimepicker\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\bootstrap-datetimepicker.min.css" />
+    <Content Include="Scripts\bootstrap-datetimepicker\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\af.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ar-ma.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ar-sa.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ar-tn.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ar.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\az.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\be.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\bg.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\bn.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\bo.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\br.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\bs.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ca.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\cs.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\cv.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\cy.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\da.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\de-at.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\de.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\el.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\en-au.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\en-ca.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\en-gb.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\eo.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\es.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\et.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\eu.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\fa.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\fi.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\fo.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\fr-ca.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\fr.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\fy.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\gl.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\he.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\hi.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\hr.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\hu.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\hy-am.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\id.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\is.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\it.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ja.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\jv.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ka.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\km.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ko.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\lb.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\lt.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\lv.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\me.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\mk.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ml.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\mr.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ms-my.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ms.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\my.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\nb.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ne.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\nl.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\nn.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\pl.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\pt-br.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\pt.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ro.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ru.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\si.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\sk.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\sl.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\sq.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\sr-cyrl.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\sr.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\sv.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\ta.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\th.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\tl-ph.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\tr.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\tzl.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\tzm-latn.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\tzm.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\uk.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\uz.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\vi.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\zh-cn.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\locale\zh-tw.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker\moment.min.js" />
+    <Content Include="Scripts\bootstrap-notify.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\chosen.jquery.min.js" />
+    <Content Include="Scripts\ion-rangeslider\ion.rangeSlider.min.css" />
+    <Content Include="Scripts\ion-rangeslider\ion.rangeSlider.min.js" />
+    <Content Include="Scripts\jconfirm\jquery-confirm.min.css" />
+    <Content Include="Scripts\jconfirm\jquery-confirm.min.js" />
+    <Content Include="Scripts\jquery-tags-input\jquery.tagsinput.min.css" />
+    <Content Include="Scripts\jquery-tags-input\jquery.tagsinput.min.js" />
+    <Content Include="Scripts\jquery.bootstrap.wizard.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
+    <Content Include="fonts\materialdesignicons.eot" />
+    <Content Include="fonts\materialdesignicons.ttf" />
+    <Content Include="fonts\materialdesignicons.woff" />
+    <Content Include="fonts\materialdesignicons.woff2" />
+    <EntityDeploy Include="Models\Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model2.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model.edmx.diagram">
+      <DependentUpon>Model.edmx</DependentUpon>
+    </Content>
+    <Content Include="Content\wangEditor\fonts\w-e-icon.woff" />
+    <Content Include="Content\wangEditor\wangEditor.min.js.map" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\lightyear.js" />
+    <Content Include="Scripts\main.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\perfect-scrollbar.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstract\IAllUserInfo.cs" />
+    <Compile Include="Abstract\IArticle.cs" />
+    <Compile Include="Abstract\IContribution.cs" />
+    <Compile Include="Abstract\IFeedBack.cs" />
+    <Compile Include="Abstract\IGameMember.cs" />
+    <Compile Include="Abstract\IInformMessage.cs" />
+    <Compile Include="Abstract\IMemberGroup.cs" />
+    <Compile Include="Abstract\IMyUserInfo.cs" />
+    <Compile Include="Abstract\IPerson.cs" />
+    <Compile Include="Abstract\IQuestionary.cs" />
+    <Compile Include="Abstract\IRecover.cs" />
+    <Compile Include="Abstract\ISignInfo.cs" />
+    <Compile Include="Abstract\IUserRecord.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Concrete\EFAllUserInfo.cs" />
+    <Compile Include="Concrete\EFArticle.cs" />
+    <Compile Include="Concrete\EFContribution.cs" />
+    <Compile Include="Concrete\EFFeedBack.cs" />
+    <Compile Include="Concrete\EFGameMember.cs" />
+    <Compile Include="Concrete\EFInformMessage.cs" />
+    <Compile Include="Concrete\EFMemberGroup.cs" />
+    <Compile Include="Concrete\EFMyUserInfo.cs" />
+    <Compile Include="Concrete\EFPerson.cs" />
+    <Compile Include="Concrete\EFQuestionary.cs" />
+    <Compile Include="Concrete\EFRecover.cs" />
+    <Compile Include="Concrete\EFUserRecord.cs" />
+    <Compile Include="Concrete\EFSignInfo.cs" />
+    <Compile Include="Controllers\ContributionController.cs" />
+    <Compile Include="Controllers\GameMemberController.cs" />
+    <Compile Include="Controllers\MemberGroupController.cs" />
+    <Compile Include="Controllers\PersonActivityController.cs" />
+    <Compile Include="Controllers\PersonRelevantController.cs" />
+    <Compile Include="Controllers\RelevantController.cs" />
+    <Compile Include="Controllers\SignController.cs" />
+    <Compile Include="Controllers\SystemController.cs" />
+    <Compile Include="Filters\UserAttribute.cs" />
+    <Compile Include="Infrastructure\Concrete\CustomAuthor.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\Abstract\IAuthProvider.cs" />
+    <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
+    <Compile Include="Models\Article.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Authority.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Contribution.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ContributionList.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Feedback.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FillOut.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GameAuthority.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GameMember.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InformMessage.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MemberGroup.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MemberGroupList.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Question.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Questionary.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Select.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SignInfo.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SignList.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserInfo.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserLoginRecord.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserOperateRecord.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MyHelper\CovertListHelper.cs" />
+    <Compile Include="MyHelper\ImportExcel.cs" />
+    <Compile Include="MyHelper\VerifyCode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AllUserInfoViewModel.cs" />
+    <Compile Include="ViewModels\ArticleViewModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\ContributionViewModel.cs" />
+    <Compile Include="ViewModels\ContributionListViewModel.cs" />
+    <Compile Include="ViewModels\DoSignViewModel.cs" />
+    <Compile Include="ViewModels\FeedBackViewModel.cs" />
+    <Compile Include="ViewModels\GameMemberViewModel.cs" />
+    <Compile Include="ViewModels\InformMessageViewModel.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MemberGroupListViewModel.cs" />
+    <Compile Include="ViewModels\MemberGroupViewModel.cs" />
+    <Compile Include="ViewModels\MyUserInfoViewModel.cs" />
+    <Compile Include="ViewModels\QuestionViewModel.cs" />
+    <Compile Include="ViewModels\QuestionaryViewModel.cs" />
+    <Compile Include="ViewModels\ShowGameMemberViewModel.cs" />
+    <Compile Include="ViewModels\SignInfoViewModel.cs" />
+    <Compile Include="ViewModels\SignListViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="Content\fonts\materialdesignicons.eot" />
+    <Content Include="Content\fonts\materialdesignicons.ttf" />
+    <Content Include="Content\fonts\materialdesignicons.woff" />
+    <Content Include="Content\fonts\materialdesignicons.woff2" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Scripts\bootstrap-colorpicker\css\bootstrap-colorpicker.css.map" />
+    <Content Include="Scripts\bootstrap-colorpicker\css\bootstrap-colorpicker.min.css.map" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker3.css.map" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker3.min.css.map" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Content\Error.html" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\MyUserInfo.cshtml" />
+    <Content Include="Views\Admin\ChangePassword.cshtml" />
+    <Content Include="Views\GameMember\GameMemberManage.cshtml" />
+    <Content Include="Views\GameMember\Authority.cshtml" />
+    <Content Include="Views\GameMember\_GameMemberTable.cshtml" />
+    <Content Include="Views\GameMember\Add.cshtml" />
+    <Content Include="Views\GameMember\Edit.cshtml" />
+    <Content Include="Views\Contribution\ContributionManage.cshtml" />
+    <Content Include="Views\Contribution\ContributionListManage.cshtml" />
+    <Content Include="Views\Contribution\_ContributionInfo.cshtml" />
+    <Content Include="Views\Contribution\_ContributionInfoPageTable.cshtml" />
+    <Content Include="Views\Contribution\_AddContributionInfo.cshtml" />
+    <Content Include="Views\Contribution\_EditContributionInfo.cshtml" />
+    <Content Include="Views\Contribution\_ContributionList.cshtml" />
+    <Content Include="Views\Contribution\_AddContributionList.cshtml" />
+    <Content Include="Views\Contribution\_EditContributionList.cshtml" />
+    <Content Include="Views\Contribution\_ContributionListPageTable.cshtml" />
+    <Content Include="Views\Contribution\_GameMember.cshtml" />
+    <Content Include="Views\Contribution\DealContributionManage.cshtml" />
+    <Content Include="Views\Contribution\_TabContent.cshtml" />
+    <Content Include="Views\Contribution\_noWrite.cshtml" />
+    <Content Include="Views\Contribution\_yesWrite.cshtml" />
+    <Content Include="Views\Account\SetPassword.cshtml" />
+    <Content Include="Views\Account\Error.cshtml" />
+    <Content Include="Views\Admin\UserOperateRecord.cshtml" />
+    <Content Include="Views\Admin\_UserOperateRecordPageTable.cshtml" />
+    <Content Include="Views\Admin\_UserOperateRecord.cshtml" />
+    <Content Include="Views\Admin\_UserLoginRecordPageTable.cshtml" />
+    <Content Include="Views\Admin\_UserLoginRecord.cshtml" />
+    <Content Include="Views\Admin\UserLoginRecord.cshtml" />
+    <None Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Add.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\Authority.cshtml" />
+    <Content Include="Views\Sign\SignListManage.cshtml" />
+    <Content Include="Views\Sign\SignInfoManage.cshtml" />
+    <Content Include="Views\Sign\_SignList.cshtml" />
+    <Content Include="Views\Sign\_signListsPageTable.cshtml" />
+    <Content Include="Views\Sign\_SignListAdd.cshtml" />
+    <Content Include="Views\Sign\_SignListEdit.cshtml" />
+    <Content Include="Views\Sign\_SignInfo.cshtml" />
+    <Content Include="Views\Sign\_SignInfoPageTable.cshtml" />
+    <Content Include="Views\Sign\_AddSignInfo.cshtml" />
+    <Content Include="Views\Sign\_EditSignInfo.cshtml" />
+    <Content Include="Views\MemberGroup\MemberGroupManage.cshtml" />
+    <Content Include="Views\MemberGroup\MemberGroupListManage.cshtml" />
+    <Content Include="Views\MemberGroup\_AddMemberGroupInfo.cshtml" />
+    <Content Include="Views\MemberGroup\_AddMemberGroupList.cshtml" />
+    <Content Include="Views\MemberGroup\_MemberGroupInfo.cshtml" />
+    <Content Include="Views\MemberGroup\_MemberGroupInfoPageTable.cshtml" />
+    <Content Include="Views\MemberGroup\_MemberGroupList.cshtml" />
+    <Content Include="Views\MemberGroup\_MemberGroupListPageTable.cshtml" />
+    <Content Include="Views\MemberGroup\_EditMemberGroupInfo.cshtml" />
+    <Content Include="Views\MemberGroup\_EditMemberGroupList.cshtml" />
+    <Content Include="Views\User\AddGM.cshtml" />
+    <Content Include="Views\Sign\_GameMember.cshtml" />
+    <Content Include="Views\MemberGroup\_GameMember.cshtml" />
+    <Content Include="Views\MemberGroup\DealMemberGroupManage.cshtml" />
+    <Content Include="Views\MemberGroup\_TabContent.cshtml" />
+    <Content Include="Views\Relevant\InformMessage.cshtml" />
+    <Content Include="Views\Relevant\_Inform.cshtml" />
+    <Content Include="Views\Relevant\_InformPageTable.cshtml" />
+    <Content Include="Views\Relevant\QuestionaryManage.cshtml" />
+    <Content Include="Views\Relevant\_Questionary.cshtml" />
+    <Content Include="Views\Relevant\_QuestionaryPageTable.cshtml" />
+    <Content Include="Views\Relevant\QuestionManage.cshtml" />
+    <Content Include="Views\Relevant\_Questions.cshtml" />
+    <Content Include="Views\Relevant\ArticleManage.cshtml" />
+    <Content Include="Views\Relevant\AddArticle.cshtml" />
+    <Content Include="Views\Relevant\_Article.cshtml" />
+    <Content Include="Views\Relevant\_ArticlePageTable.cshtml" />
+    <Content Include="Views\Relevant\ShowArticle.cshtml" />
+    <Content Include="Views\Relevant\EditArticle.cshtml" />
+    <Content Include="Views\Relevant\FeedBackManage.cshtml" />
+    <Content Include="Views\Relevant\_FeedBack.cshtml" />
+    <Content Include="Views\Relevant\_FeedBackPageTable.cshtml" />
+    <Content Include="Views\System\UserLoginRecord.cshtml" />
+    <Content Include="Views\System\UserOperateRecord.cshtml" />
+    <Content Include="Views\System\_UserLoginRecord.cshtml" />
+    <Content Include="Views\System\_UserLoginRecordPageTable.cshtml" />
+    <Content Include="Views\System\_UserOperateRecord.cshtml" />
+    <Content Include="Views\System\_UserOperateRecordPageTable.cshtml" />
+    <Content Include="Views\System\UserDel.cshtml" />
+    <Content Include="Views\System\_UserDel.cshtml" />
+    <Content Include="Views\System\_UserInfoPageTable.cshtml" />
+    <Content Include="Views\System\GameMemberDel.cshtml" />
+    <Content Include="Views\System\_GameMemberDel.cshtml" />
+    <Content Include="Views\System\_GameMemberPageTable.cshtml" />
+    <Content Include="Views\PersonActivity\DoSign.cshtml" />
+    <Content Include="Views\PersonActivity\SignRecord.cshtml" />
+    <Content Include="Views\PersonActivity\ContributionRecord.cshtml" />
+    <Content Include="Views\PersonActivity\MemberGroupRecord.cshtml" />
+    <Content Include="Views\PersonActivity\_DoSign.cshtml" />
+    <Content Include="Views\PersonRelevant\Article.cshtml" />
+    <Content Include="Views\PersonRelevant\_ArticlePageTable.cshtml" />
+    <Content Include="Views\PersonRelevant\_Article.cshtml" />
+    <Content Include="Views\PersonRelevant\ShowArticle.cshtml" />
+    <Content Include="Views\PersonRelevant\_FeedBack.cshtml" />
+    <Content Include="Views\PersonRelevant\_FeedBackPageTable.cshtml" />
+    <Content Include="Views\PersonRelevant\FeedBack.cshtml" />
+    <Content Include="Views\PersonRelevant\Question.cshtml" />
+    <Content Include="Views\PersonRelevant\Questionary.cshtml" />
+    <Content Include="Views\PersonRelevant\_Questions.cshtml" />
+    <Content Include="Views\PersonRelevant\_QuestionaryPageTable.cshtml" />
+    <Content Include="Views\PersonRelevant\_Questionary.cshtml" />
+    <Content Include="Views\Relevant\ShowQuestionaryResult.cshtml" />
+    <Content Include="Views\PersonActivity\ShowGameMember.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\images\article\" />
+    <Folder Include="Files\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>63001</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:63001/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,180 @@
+﻿@model GameClub.ViewModels.MemberGroupViewModel
+@{
+    @*AjaxOptions ajaxOptionsSave = new AjaxOptions
+        {
+            Url = Url.Action("DealMemberGroupManageSave", "MemberGroup"),
+            OnSuccess = "OnSuccess",
+            OnBegin = "OnBegin",
+            UpdateTargetId = "TabContent",
+        };*@
+}
+
+@*<div class="tab-pane fade row active in " id="DefaultGroup">
+        @using (Ajax.BeginForm(null, null, ajaxOptionsSave, new { id = "TableDefaultForm" }))
+        {
+            <input type="text" name="ContributionID" value="@Model.MemberGroupList.MemberGroupID" hidden />
+            <input hidden type="text" id="TabSign" value="DefaultGroup" />
+            if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+            {
+                <div>
+                    @Html.Partial("_DefaultGroup", Model)
+                </div>
+            }
+        }
+    </div>
+    <div class="tab-pane row fade" id="CatGroup">
+        @using (Ajax.BeginForm(null, null, ajaxOptionsSave, new { id = "TableCatForm" }))
+        {
+            <input type="text" name="ContributionID" value="@Model.MemberGroupList.MemberGroupID" hidden />
+            <input hidden type="text" id="TabSign" value="CatGroup" />
+            if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+            {
+                <div>
+                    @Html.Partial("_CatGroup", Model)
+                </div>
+            }
+        }
+    </div>
+    <div class="tab-pane row fade" id="DogGroup">
+        @using (Ajax.BeginForm(null, null, ajaxOptionsSave, new { id = "TableDogForm" }))
+        {
+            <input type="text" name="ContributionID" value="@Model.MemberGroupList.MemberGroupID" hidden />
+            <input hidden type="text" id="TabSign" value="DogGroup" />
+            if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+            {
+                <div>
+                    @Html.Partial("_DogGroup", Model)
+                </div>
+            }
+        }
+    </div>
+    <div class="tab-pane row fade" id="FishGroup">
+        @using (Ajax.BeginForm(null, null, ajaxOptionsSave, new { id = "TableFishForm" }))
+        {
+            <input type="text" name="ContributionID" value="@Model.MemberGroupList.MemberGroupID" hidden />
+            <input hidden type="text" id="TabSign" value="FishGroup" />
+            if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+            {
+                <div>
+                    @Html.Partial("_FishGroup", Model)
+                </div>
+            }
+        }
+    </div>*@
+@if (Model.MemberGroupList != null)
+{
+    <input type="text" id="MemberGroupID" name="MemberGroupID" value="@Model.MemberGroupList.MemberGroupID" hidden />
+    <div class="card">
+        <div class="card-header bg-danger">
+            <h4>未分配组</h4>
+        </div>
+        <div class="card-body">
+            @if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+            {
+                foreach (var item in Model.MemberGroups)
+                {
+                    if (string.IsNullOrEmpty(item.GroupName))
+                    {
+                        <label class="lyear-checkbox checkbox-inline">
+                            <input type="checkbox" name="listid" value="@item.GameID">
+                            <span>@item.GameID @Model.GetGameName(item.GameID)</span>
+                        </label>
+                    }
+
+                }
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary">
+            <h4>猫组</h4>
+        </div>
+        <div class="card-body">
+            @if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+            {
+                foreach (var item in Model.MemberGroups)
+                {
+                    if (!string.IsNullOrEmpty(item.GroupName) && item.GroupName.ToString().Equals("猫组"))
+                    {
+                        <label class="lyear-checkbox checkbox-inline">
+                            <input type="checkbox" name="listid" value="@item.GameID">
+                            <span>@item.GameID @Model.GetGameName(item.GameID)</span>
+                        </label>
+                    }
+
+                }
+            }
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-success">
+            <h4>狗组</h4>
+        </div>
+        <div class="card-body">
+            @if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+            {
+                foreach (var item in Model.MemberGroups)
+                {
+                    if (!string.IsNullOrEmpty(item.GroupName) && item.GroupName.ToString().Equals("狗组"))
+                    {
+                        <label class="lyear-checkbox checkbox-inline">
+                            <input type="checkbox" name="listid" value="@item.GameID">
+                            <span>@item.GameID @Model.GetGameName(item.GameID)</span>
+                        </label>
+                    }
+
+                }
+            }
+        </div>
+    </div>
+
+    if (Model.MemberGroupList.Type.Equals("团本"))
+    {
+        <div class="card">
+            <div class="card-header bg-info">
+                <h4>鱼组</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.MemberGroups != null && Model.MemberGroups.Count() != 0)
+                {
+                    foreach (var item in Model.MemberGroups)
+                    {
+                        if (!string.IsNullOrEmpty(item.GroupName) && item.GroupName.ToString().Equals("鱼组"))
+                        {
+                            <label class="lyear-checkbox checkbox-inline">
+                                <input type="checkbox" name="listid" value="@item.GameID">
+                                <span>@item.GameID @Model.GetGameName(item.GameID)</span>
+                            </label>
+                        }
+
+                    }
+                }
+            </div>
+        </div>
+
+    }
+}
+else
+{
+    <h4>当前无表可操作</h4>
+}
+<script type="text/javascript">
+    $(document).ready(
+        function DealButton() {
+            @if (Model.MemberGroupList!=null&&Model.MemberGroupList.Type.ToString().Equals("团本"))
+            {
+                <text>
+            $('#FishButton').show();
+                </text>
+            }
+            else
+            {
+                <text>
+            $('#FishButton').hide();
+                </text>
+            }
+        }
+    );
+</script>

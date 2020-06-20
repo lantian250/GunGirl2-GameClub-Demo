@@ -1,0 +1,103 @@
+﻿@model GameClub.ViewModels.ContributionViewModel
+@{
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "ContributionInfoPageTable",
+        Url = Url.Action("AddContributionInfo"),
+        OnSuccess = "OnAddContributionInfoSuccess",
+        OnFailure = "OnAddContributionInfoFault",
+    };
+}
+<div class="modal fade" id="AddContributionInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增贡献表信息</h4>
+            </div>
+            @using (Ajax.BeginForm(ajaxOptions))
+            {
+                @Html.HiddenFor(m => m.PageIndex)
+                @Html.HiddenFor(m => m.PageSize)
+                @Html.HiddenFor(m => m.Keyword)
+                @Html.HiddenFor(m => m.CurrentSort)
+                @Html.HiddenFor(m => m.SortBy)
+                @Html.Hidden("IsOrderBy", false)
+                <div class="modal-body">
+                    @Html.ValidationSummary()
+                    <div class="form-group">
+                        <label for="ContributionID" class="control-label">选择贡献表ID：</label>
+                        <div>
+                            <select class="form-control" id="ContributionID" name="ContributionID" size="1" onchange="OnSelect()">
+                                @if (Model.ContributionLists != null)
+                                {
+                                    <option value="" selected>请选择</option>
+                                    foreach (var item in Model.ContributionLists)
+                                    {
+                                        <option value="@item.ContributionID">@item.ContributionID</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="" selected>暂时没有可选的签到表</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div >
+
+                    </div>
+                    <div class="form-group" id="GameMember" hidden>
+                        @Html.Partial("_GameMember", Model)
+                    </div>
+                    <div class="form-group">
+                        <label for="AllContribution" class="control-label">总贡献：</label>
+                        <input type="text" class="form-control" id="AllContribution" name="AllContribution" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+            @using (Ajax.BeginForm("", null, null, new AjaxOptions { UpdateTargetId = "GameMember", OnSuccess = "OnSelectSuccess", Url = Url.Action("GetAddGameMember", "Contribution") }, new { id = "GetGameMemberSubmit" }))
+            {
+                <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.PageSize" />
+                <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+                <input hidden type="text" name="ContributionID" id="AddGameID" value="" />
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function OnAddContributionInfoSuccess() {
+        $('#SearchForm').submit();
+        $('#AddContributionInfoModal').modal('hide');
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('添加贡献信息成功!', 'success', 3000);
+        }, 1e3);
+    }
+    function OnAddContributionInfoFault() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('添加贡献信息失败或已存在该信息，请核对!', 'danger', 3000);
+        }, 1e3);
+
+    }
+    function OnSelect() {
+        var ContributionID = $('#ContributionID').val();
+        $('#AddGameID').val(ContributionID);
+        $('#GetGameMemberSubmit').submit();
+    }
+    function OnSelectSuccess() {
+        $('#GameMember').show();
+    }
+</script>
+<script type="text/javascript" src="~/Scripts/main.min.js"></script>

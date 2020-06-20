@@ -1,0 +1,58 @@
+﻿@using GameClub.Models;
+@model GameClub.ViewModels.QuestionaryViewModel
+@{
+    FillOut fillOut = new FillOut();
+}
+<div class="row">
+    @foreach (var item in Model.Questionaries)
+    {
+        fillOut = Model.FillOuts.Where(f => f.QuestionaryID == item.QuestionaryID).FirstOrDefault();
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header row @(fillOut==null?"bg-danger":"bg-success")">
+                    <div class="col-md-6">
+                        <h4>@item.Title</h4>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h4 class="pull-right">@(fillOut == null ? "未填写" : "已填写")</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>问卷内容简介：@item.Context</p>
+                    <p>问卷结束时间：@item.EndTime</p>
+                    <p>问卷题目数量：@(Model.Questions.Where(q => q.QuestionaryID == item.QuestionaryID).Count())</p>
+                    @if (fillOut != null)
+                    {
+                        <p>您已填写该问卷</p>
+                    }
+                </div>
+                <footer class="card-footer">
+                    @*<div class="example-left m-t-10 pull-left">
+                            <label class="lyear-checkbox">
+                                <input type="checkbox">
+                                <span>五天内自动登录</span>
+                            </label>
+                        </div>*@
+                    <div class="example-right pull-right">
+
+                        @if (item.EndTime < DateTime.Now)
+                        {
+                            <button class="btn btn-primary" href="@Url.Action("QuestionManage",new {item.QuestionaryID })" disabled>问卷已过期！</button>
+                        }
+                        @if (fillOut != null|| item.EndTime < DateTime.Now)
+                        {
+                            <a class="btn btn-primary" href="@Url.Action("Question","PersonRelevant",new {item.QuestionaryID })" target="_blank">查看该问卷</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary" href="@Url.Action("Question","PersonRelevant",new {item.QuestionaryID })" target="_blank">填写该问卷</a>
+                        }
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+    }
+</div>

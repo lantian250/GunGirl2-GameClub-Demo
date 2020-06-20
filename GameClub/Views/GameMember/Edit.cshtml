@@ -1,0 +1,56 @@
+﻿@model GameClub.ViewModels.GameMemberViewModel
+
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增用户</h4>
+            </div>
+            @using (Html.BeginForm("Edit", "GameMember", new { pageid = Model.PageID, pagesize = Model.PageSize, keyword = Model.keyword , sortBy = Model.SortBy, currentsort = Model.CurrentSort, IsOrderBy = false }, FormMethod.Post))
+            {
+                <div class="modal-body">
+                    @Html.ValidationMessage("GameID")
+                    <div class="form-group">
+                        <input type="text" class="hidden" name="oldGameID" value="@ViewBag.GameID"/>
+                        <label for="GameID" class="control-label">游戏ID：</label>
+                        <input type="text" class="form-control" id="GameID" name="GameID" value="@ViewBag.GameID">
+                    </div>
+                    @Html.ValidationMessage("GameName")
+                    <div class="form-group">
+                        <label for="GameName" class="control-label">游戏昵称：</label>
+                        <input type="text" class="form-control" id="GameName" name="GameName" value="@ViewBag.GameName">
+                    </div>
+                    <div class="form-group">
+                        <label for="Authority" class="control-label">社团职位：</label>
+                        <div>
+                            <select class="form-control" id="Authority" name="Authority" size="1">
+                                @foreach (var item in Model.GameAuthorities)
+                                {
+                                    if (item.Number == Convert.ToInt32(ViewBag.Authority))
+                                    {
+                                        <option value="@item.Number" selected>@item.AuthorityString</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Number">@item.AuthorityString</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="JoinDate" class="control-label">加入日期：</label>
+                        <input class="form-control js-datepicker m-b-10" type="text" id="JoinDate" name="JoinDate" placeholder="yyyy-mm-dd" data-date-format="yyyy-mm-dd" value="@ViewBag.JoinDate" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-default" href="@Url.Action("GameMemberManage",new {pageid=Model.PageID,pagesize=Model.PageSize,keyword=Model.keyword,Model.SortBy,Model.CurrentSort,IsOrderBy=false})">关闭</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

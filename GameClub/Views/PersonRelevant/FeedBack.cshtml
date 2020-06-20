@@ -1,0 +1,129 @@
+﻿@model GameClub.ViewModels.FeedBackViewModel
+@{
+    ViewBag.Title = "留言回馈";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    AjaxOptions ajaxOptionsSearch = new AjaxOptions
+    {
+        Url = Url.Action("FeedBack", "PersonRelevant"),
+        UpdateTargetId = "FeedBackPageTable",
+    };
+    AjaxOptions ajaxOptionsAdd = new AjaxOptions
+    {
+        Url = Url.Action("AddFeedBack", "PersonRelevant"),
+        OnBegin = "OnBegin",
+        OnSuccess = "OnAddSuccess",
+        OnFailure = "OnAddFault",
+    };
+}
+
+@section main{
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-toolbar clearfix row ">
+                        <div class="toolbar-btn-action col-md-6">
+                            <button type="button" class="btn btn-primary m-r-5" data-toggle="modal" data-target="#AddModal"><i class="mdi mdi-plus"></i> 新增</button>
+                        </div>
+                        <div class="pull-right search-bar col-md-6">
+                            @using (Ajax.BeginForm(null, null, ajaxOptionsSearch, new { id = "SearchForm" }))
+                            {
+                                <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="留空搜索展示所有内容" value="">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-secondary" id="search-btn" type="submit" accesskey="on"><i class="mdi mdi-search-web"></i> 搜索</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="FeedBackPageTable">
+                            @Html.Partial("_FeedBack", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">回复该反馈</h4>
+                </div>
+                @using (Ajax.BeginForm(ajaxOptionsAdd))
+                {
+                    <div class="modal-body">
+                        @Html.ValidationSummary()
+                        <div class="form-group">
+                            <label for="Title" class="control-label">标题：</label>
+                            <input type="text" class="form-control" id="Title" name="Title" value="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Context" class="control-label">内容：</label>
+                            <textarea name="Context" id="Context" class="form-control" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+
+    <script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function Add(FeedBackID) {
+            $('#FeedBackID').val(FeedBackID);
+            $('#AddModal').modal("show");
+        }
+        function OnAddSuccess() {
+            $('#SearchForm').submit();
+            $('#AddModal').modal("hide");
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('添加成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnAddFault() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('添加失败，请检查输入内容!', 'danger', 3000);
+            }, 1e3)
+        }
+        function OnDelSuccess() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnDelFailure() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除失败，请检查!', 'danger', 3000);
+            }, 1e3)
+        }
+        $(document).ready(
+        function DealLink() {
+            $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+            $("[id=pageIndexInput]").each(function () { $(this).val("@Model.PageIndex") })
+        }
+    );
+    </script>
+
+}

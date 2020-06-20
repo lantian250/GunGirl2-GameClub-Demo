@@ -1,0 +1,127 @@
+﻿@using GameClub.Models;
+@model GameClub.ViewModels.DoSignViewModel
+
+@{
+    AjaxOptions ajaxOptionsSign = new AjaxOptions
+    {
+        Url = Url.Action("UpdateSign", "PersonActivity"),
+        OnBegin = "OnBegin",
+        OnSuccess = "OnSignSuccess",
+        OnFailure = "OnSignFailure",
+        UpdateTargetId = "DoSignCard",
+    };
+    SignInfo signInfo;
+    MemberGroup memberGroup;
+}
+
+@if (Model.signLists != null)
+{
+    foreach (var item in Model.signLists)
+    {
+        <div class="clear"></div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card ">
+                <div class="card-header bg-primary">
+                    <h4 class="text-center">签到表ID:@item.SignID</h4>
+                </div>
+                @using (Ajax.BeginForm(" ", null, null, ajaxOptionsSign))
+                {
+                    signInfo = Model.signInfos.Where(s => s.SignID == item.SignID).FirstOrDefault();
+                    memberGroup = Model.MemberGroups.Where(m => m.MemberGroupID == item.MemberGroupID).FirstOrDefault();
+                <div class="card-body">
+                    @Html.Hidden("SignID", item.SignID)
+                    <div class="form-group">
+                        <label for="SignCondition" class="label-control">请选择签到</label>
+                        <select class="form-control" name="SignCondition" id="SignCondition" size="1">
+                            @if (signInfo != null && signInfo.SignCondition.ToString().Equals("能语音"))
+                            {
+                                <option value="能语音" selected>能语音</option>
+                                <option value="不能语音">不能语音</option>
+                            }
+                            else
+                            {
+                                <option value="不能语音" selected>不能语音</option>
+                                <option value="能语音">能语音</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="IsLeave" class="label-control">请选择签到</label>
+
+                        <select class="form-control" name="IsLeave" id="IsLeave" size="1">
+
+                            @if (signInfo != null && signInfo.IsLeave==true)
+                            {
+                                <option value="true" selected>请假</option>
+                                <option value="false">未请假</option>
+                            }
+                            else
+                            {
+                                <option value="false" selected>未请假</option>
+                                <option value="true">请假</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-control">签到开始时间:@item.StartDateTime.ToString("yyyy年MM月dd日 HH:mm")</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="label-control">签到结束时间:@item.EndDateTime.ToString("yyyy年MM月dd日 HH:mm")</label>
+                    </div>
+                    <div class="form-group">
+                        @if (memberGroup == null || memberGroup.GroupName == null)
+                        {
+                            <label class="label-control">您所在分组为:未分配</label>
+                        }
+                        else
+                        {
+                            <label class="label-control">您所在分组为:@memberGroup.GroupName.ToString()</label>
+                        }
+
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    @if (signInfo != null)
+                    {
+                        if (signInfo.SignCondition.ToString().Equals("未签到"))
+                        {
+                            <div class="form-group">
+                                <label class="label-control">签到状态:未签到</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <label class="label-control">签到状态：@signInfo.SignCondition.ToString()</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="label-control">签到时间：@(Convert.ToDateTime(signInfo.SignDatetime).ToString("yyyy年MM月dd日 HH:mm"))</label>
+                            </div>
+                        }
+                        <div class="form-group">
+                            <label class="label-control">请假状态：@(signInfo.IsLeave == true ? "请假" : "未请假")</label>
+                        </div>
+                        if (item.Active == false)
+                        {
+                            <label class="label-control">已禁用！</label>
+                        }
+                        if (DateTime.Now > item.StartDateTime && DateTime.Now < item.EndDateTime)
+                        {
+                            <button type="submit" class="btn btn-primary">签到</button>
+                        }
+                        else
+                        {
+                            <label class="label-control">不在签到时间范围内！</label>
+                        }
+                    }
+                    else
+                    {
+                        <label class="label-control">该签到表不存在您的信息！</label>
+                    }
+                </footer>
+                }
+
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,218 @@
+﻿@model GameClub.ViewModels.ContributionListViewModel
+
+@{
+    ViewBag.Title = "社团贡献表管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "ContributionListPageTable",
+        Url = Url.Action("ContributionListManage"),
+        //OnBegin = "OnBegin",
+        //OnSuccess = "OnSearchSuccess",
+        //OnFailure = "OnSearchFailure",
+    };
+    AjaxOptions ajaxOptionImport = new AjaxOptions
+    {
+        UpdateTargetId = "ContributionListPageTable",
+        Url = Url.Action("ImportContribution"),
+        OnBegin = "OnBegin",
+        OnSuccess = "OnImportSuccess",
+        OnFailure = "OnImportFailure",
+    };
+    AjaxOptions ajaxOptionAdd = new AjaxOptions
+    {
+        UpdateTargetId = "AddContributionList",
+        Url = Url.Action("GetAddContributionList"),
+        //OnBegin = "OnBegin",
+        OnSuccess = "GetAddModal",
+        //OnFailure = "OnSearchFailure",
+    };
+    AjaxOptions DealTable = new AjaxOptions
+    {
+        Url = Url.Action("DealContributionList"),
+        OnBegin = "OnBegin",
+        Confirm = "确定是否删除！",
+        OnSuccess = "OnDealListSuccess",
+        UpdateTargetId = "ContributionListPageTable"
+
+    };
+}
+
+@section main{
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-toolbar clearfix">
+                    <div class="pull-right search-bar">
+                        @using (Ajax.BeginForm(null, null, ajaxOptions, new { id = "SearchForm" }))
+                        {
+                            <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.PageSize" />
+                            <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                            <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                            <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                            <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="留空搜索展示所有内容" value="@Model.Keyword">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-secondary" id="search-btn" type="submit" accesskey="on"><i class="mdi mdi-search-web"></i> 搜索</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="toolbar-btn-action">
+                        @using (Ajax.BeginForm(null, null, ajaxOptionAdd, new { id = "AddForm" }))
+                        {
+                            <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.PageSize" />
+                            <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                            <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                            <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                            <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+                        }
+                        @*@Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetAddSignList", new { Model.pageID, Model.pageSize, Model.keyword }), UpdateTargetId = "AddSignList", OnSuccess = "GetAddModal" }, new { id = "AddLink", type = "button", @class = "btn btn-primary m-r-5" })*@
+                        <button type="button" name="formsubmit" class="btn btn-primary m-r-5" onclick="AddSubmit()"><i class="mdi mdi mdi-plus"></i> 新增</button>
+                        <button type="button" name="formsubmit" class="btn btn-danger m-r-5" onclick="TableSubmit('删除');" value="删除"><i class="mdi mdi-window-close"></i> 删除</button>
+                        <div class="btn-group">
+                            <button type="button" id="PageSizeMenu" class="btn btn-secondary dr/opdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                单页显示数量:@(Model.PageSize)条 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="PageSize(20)">20条</a></li>
+                                <li><a onclick="PageSize(30)">30条</a></li>
+                                <li><a onclick="PageSize(50)">50条</a></li>
+                                <li><a onclick="PageSize(100)">100条</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @using (Ajax.BeginForm(null, null, DealTable, new { id = "TableForm" }))
+                    {
+                        <input hidden type="text" name="DealAction" id="DealAction" />
+                        <div id="ContributionListPageTable"  class="table-responsive">
+                            @Html.Partial("_ContributionList", Model)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="AddContributionList">
+        @Html.Partial("_AddContributionList", Model)
+    </div>
+    <div id="EditContributionList">
+        @Html.Partial("_EditContributionList", Model)
+    </div>
+    <div class="modal fade" id="ImportContributionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">导入贡献数据</h4>
+                </div>
+                @using (Ajax.BeginForm(" ", null, null, ajaxOptionImport, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(m => m.PageIndex)
+                    @Html.HiddenFor(m => m.PageSize)
+                    @Html.HiddenFor(m => m.Keyword)
+                    @Html.HiddenFor(m => m.CurrentSort)
+                    @Html.HiddenFor(m => m.SortBy)
+                    @Html.Hidden("IsOrderBy", false)
+                    <div class="modal-body">
+                        @Html.ValidationSummary()
+                        <input type="text" value="" hidden id="ImportContributionID" name="ContributionID" />
+                        <div class="form-group">
+                            <a href="@Url.Action("ExportContribution", "Contribution")">下载样本文件</a>
+                        </div>
+                        <div class="form-group">
+                            <label for="File" class="control-label">导入文件：</label>
+                            <input type="file" class="form-control" id="File" name="file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('确定提交吗?默认会覆盖原有贡献数据');">保存</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+
+    <script type="text/javascript">
+
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnSearchSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('查询成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnSearchFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('查询失败!', 'success', 3000);
+            }, 1e3)
+        }
+        function GetAddModal() {
+            $('#AddContributionListModal').modal("show")
+        }
+        function GetEditModal() {
+            $('#EditContributionListModal').modal("show")
+        }
+        function AddSubmit() {
+            $('#AddForm').submit();
+        }
+        function PageSize(pagesize) {
+            $('#PageSizeMenu').html("单页显示数量:" + pagesize + "条 <span class='caret'></span>")
+            $("[id=PageSizeInput]").each(function () { $(this).val(pagesize) })
+            $('#SearchForm').submit();
+        }
+        function TableSubmit(Action) {
+            $('#DealAction').val(Action);
+            $('#TableForm').submit();
+        }
+        function OnDealListSuccess() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('操作成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function ImportFile(ContributionID) {
+            $('#ImportContributionID').val(ContributionID);
+            $('#ImportContributionModal').modal("show")
+        }
+        function OnImportSuccess() {
+            $('#ImportContributionModal').modal("hide")
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('导入成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnImportFailure() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('导入失败!', 'danger', 3000);
+            }, 1e3)
+        }
+        $(document).ready(
+            function DealLink() {
+                $("[id=EditLink]").each(function () { $(this).html("<i class='mdi mdi-pencil'></i>") })
+                $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+                $("[id=AddLink]").each(function () { $(this).html("<i class='mdi mdi-plus'></i> 新增") })
+                $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            }
+        );
+    </script>
+
+}
+

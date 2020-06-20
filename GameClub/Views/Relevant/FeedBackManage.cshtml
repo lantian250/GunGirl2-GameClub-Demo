@@ -1,0 +1,122 @@
+﻿@model GameClub.ViewModels.FeedBackViewModel
+@{
+    ViewBag.Title = "社团留言回馈管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    AjaxOptions ajaxOptionsSearch = new AjaxOptions
+    {
+        Url = Url.Action("ArticleManage", "Relevant"),
+        //OnBegin = "OnBegin",
+        //OnSuccess = "OnSearchSuccess",
+        //OnFailure= "OnSearchFault",
+        UpdateTargetId = "ArticlePageTable",
+    };
+    AjaxOptions ajaxOptionsAdd = new AjaxOptions
+    {
+        Url = Url.Action("AddReply", "Relevant"),
+        OnBegin = "OnBegin",
+        OnSuccess = "OnReplySuccess",
+        OnFailure = "OnReplyFault",
+        UpdateTargetId = "FeedBackPageTable",
+    };
+}
+
+@section main{
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-toolbar clearfix">
+                        <div class="pull-right search-bar">
+                            @using (Ajax.BeginForm(null, null, ajaxOptionsSearch, new { id = "SearchForm" }))
+                            {
+                                <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="FeedBackPageTable">
+                            @Html.Partial("_FeedBack", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="AddReplyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">回复该反馈</h4>
+                </div>
+                @using (Ajax.BeginForm(ajaxOptionsAdd))
+                {
+                <div class="modal-body">
+                    @Html.ValidationSummary()
+                    <input hidden type="text" name="FeedBackID" id="FeedBackID" value="" />
+                    <input hidden type="text" name="pageIndex" id="pageIndexInput" value="@Model.PageIndex" />
+                    <div class="form-group">
+                        <label for="Reply" class="control-label">回复内容：</label>
+                        <input type="text" class="form-control" id="Reply" name="Reply" value="" />
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                        <button type="submit" class="btn btn-primary">保存</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+
+    <script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function Reply(FeedBackID) {
+            $('#FeedBackID').val(FeedBackID);
+            $('#AddReplyModal').modal("show");
+        }
+        function OnReplySuccess() {
+            $('#AddReplyModal').modal("hide");
+            $('SearchForm').submit;
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('回复成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnReplyFault() {
+            $('SearchForm').submit;
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('回复失败，请检查输入内容!', 'danger', 3000);
+            }, 1e3)
+        }
+        function OnDelSuccess() {
+            $('SearchForm').submit;
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnDelFailure() {
+            $('SearchForm').submit;
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除失败，请检查!', 'danger', 3000);
+            }, 1e3)
+        }
+        $(document).ready(
+        function DealLink() {
+            $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+            $("[id=pageIndexInput]").each(function () { $(this).val("@Model.PageIndex") })
+        }
+    );
+    </script>
+
+}

@@ -1,0 +1,37 @@
+﻿@model GameClub.ViewModels.QuestionaryViewModel
+@{
+    ViewBag.Title = "问卷查看";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string[] color = { "primary", "info", "danger", "dark", "secondary", "success", "warning", };
+    AjaxOptions ajaxOptionsAdd = new AjaxOptions
+    {
+        Url = Url.Action("AddQuestionary", "Relevant"),
+        OnBegin = "OnBegin",
+        OnSuccess = "OnAddSuccess",
+        UpdateTargetId = "QuestionaryPageTable",
+    };
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>问卷查看</h4>
+                        </div>
+                    </div>
+                    <div id="QuestionaryPageTable">
+                        @Html.Partial("_Questionary", Model)
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+}
+

@@ -1,0 +1,102 @@
+﻿@model GameClub.ViewModels.QuestionViewModel
+@{
+    Layout = null;
+    AjaxOptions ajaxOptionsSubmit = new AjaxOptions
+    {
+        UpdateTargetId= "Questions",
+        Url=Url.Action("AddFillOut", "PersonRelevant"),
+        OnBegin= "OnBegin",
+        OnSuccess= "OnSubmitSuccess",
+        OnFailure= "OnSubmitFault",
+    };
+}
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>问卷调查编辑</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/style.min.css" rel="stylesheet">
+    <link href="~/Scripts/jconfirm/jquery-confirm.min.css" />
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <aside class="lyear-layout-sidebar hidden">
+                <div class="lyear-layout-sidebar-scroll hidden">
+                </div>
+            </aside>
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>@Model.Questionary.Title</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>@Model.Questionary.Context</p>
+                            </div>
+                            <footer class="card-footer">
+                                <div class="example-right pull-right">
+                                    @if (Model.Questionary.EndTime > DateTime.Now)
+                                    {
+                                        <button class="btn btn-primary" type="button" onclick="FillOutSubmit()">提交问卷</button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-primary" type="button" disabled>问卷调查已结束！</button>
+                                    }
+                                    <a class="btn btn-primary" href="@Url.Action("Questionary","PersonRelevant")">返回</a>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                    @using (Ajax.BeginForm(" ", null, null, ajaxOptionsSubmit, new { id = "FillOutAdd" }))
+                    {
+                        <div id="Questions">
+                            @Html.Partial("_Questions", Model)
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+            <!--End 页面主要内容-->
+        </div>
+    </div>
+    <script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/perfect-scrollbar.min.js"></script>
+    <script src="~/Scripts/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/lightyear.js"></script>
+    <script type="text/javascript" src="~/Scripts/main.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnSubmitSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('提交成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnSubmitFault() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('提交失败!', 'danger', 3000);
+            }, 1e3)
+        }
+        function FillOutSubmit() {
+            $('#FillOutAdd').submit();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+﻿@model GameClub.ViewModels.QuestionViewModel
+@{
+    Layout = null;
+    AjaxOptions ajaxOptionsAdd = new AjaxOptions
+    {
+        UpdateTargetId= "Questions",
+        Url=Url.Action("AddQuestion", "Relevant"),
+        OnBegin= "OnBegin",
+        OnSuccess= "OnAddSuccess",
+        OnFailure= "OnAddFailure",
+    };
+    AjaxOptions ajaxOptionsAddSelect = new AjaxOptions
+    {
+        UpdateTargetId = "Questions",
+        Url = Url.Action("AddSelect", "Relevant"),
+        OnBegin = "OnBegin",
+        OnSuccess = "OnAddSelectSuccess",
+        OnFailure = "OnAddFailure",
+    };
+}
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>问卷调查编辑</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/style.min.css" rel="stylesheet">
+    <link href="~/Scripts/jconfirm/jquery-confirm.min.css" />
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <aside class="lyear-layout-sidebar hidden">
+                <div class="lyear-layout-sidebar-scroll hidden">
+                </div>
+            </aside>
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>@Model.Questionary.Title</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>@Model.Questionary.Context</p>
+                            </div>
+                            <footer class="card-footer">
+                                <div class="example-right pull-right">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#AddQuestionModal" value="">添加问题</button>
+                                    <a class="btn btn-primary" href="@Url.Action("QuestionaryManage","Relevant",new { Model.Questionary.QuestionaryID})">返回</a>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                    <div id="Questions">
+                        @Html.Partial("_Questions", Model)
+                    </div>
+                </div>
+
+            </div>
+
+            <!--End 页面主要内容-->
+        </div>
+    </div>
+
+    <div>
+        <div class="modal fade" id="AddQuestionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">添加问题</h4>
+                    </div>
+                    @using (Ajax.BeginForm("", null, null, ajaxOptionsAdd))
+                    {
+                        @Html.HiddenFor(m => m.QuestionaryID)
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="QuestionContext" class="control-label">问题内容：</label>
+                                <input type="text" class="form-control" id="QuestionContext" name="QuestionContext">
+                            </div>
+                            <div class="form-group">
+                                <label for="Type" class="control-label">类型选择：</label>
+                                <label class="lyear-radio radio-inline radio-primary">
+                                    <input type="radio" name="Type" checked value="false"><span>单选</span>
+                                </label>
+                                <label class="lyear-radio radio-inline radio-primary">
+                                    <input type="radio" name="Type" value="true"><span>多选</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">点击保存</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="AddSelectModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">添加选项</h4>
+                    </div>
+                    @using (Ajax.BeginForm("", null, null, ajaxOptionsAddSelect))
+                    {
+                        @Html.HiddenFor(m => m.QuestionaryID)
+                        <input type="text" value="" hidden name="QuestionID" id="QuestionID" />
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="Type" class="control-label">请选择：</label>
+                            </div>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label class="lyear-radio radio-inline radio-primary">
+                                        <input type="radio" name="Type" checked value="false"><span>设定选项值</span>
+                                    </label>
+
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="SelectValue" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="lyear-radio radio-inline radio-primary">
+                                    <input type="radio" name="Type" value="true"><span>用户输入决定的选项值</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">点击保存</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/perfect-scrollbar.min.js"></script>
+    <script src="~/Scripts/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/lightyear.js"></script>
+    <script type="text/javascript" src="~/Scripts/main.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnAddSuccess() {
+            $('#AddQuestionModal').modal("hide");
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('添加成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnAddFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('添加失败，请检查!', 'danger', 3000);
+            }, 1e3)
+        }
+        function AddSelect(QuestionID) {
+            $('#QuestionID').val(QuestionID);
+            $('#AddSelectModal').modal("show");
+        }
+        function OnAddSelectSuccess() {
+            $('#AddSelectModal').modal("hide");
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('添加选项成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnDelSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnDelFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除失败，请检查!', 'danger', 3000);
+            }, 1e3)
+        }
+        
+        $(document).ready(
+            function DealLink() {
+                $("[id=Del]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+            }
+        );
+    </script>
+</body>
+</html>

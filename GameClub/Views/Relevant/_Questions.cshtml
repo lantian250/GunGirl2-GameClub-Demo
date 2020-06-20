@@ -1,0 +1,126 @@
+﻿@model GameClub.ViewModels.QuestionViewModel
+@{
+    int count = 0;
+
+}
+@foreach (var item in Model.Questions)
+{
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>@(++count).@item.QuestionContext</h4>
+                <div class="pull-right">
+                    <ul class="card-actions">
+                        <li>
+                            @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除?", Url = Url.Action("DelQuestion", new { item.QuestionID }), UpdateTargetId = "Questions", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "Del", data_toggle = "tooltip", title = "删除" })
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <p>类型：@(item.Type == false ? "单项" : "多项")</p>
+                @if (item.Type)
+                {
+                    if (Model.Selects.Where(s => s.QuestionID == item.QuestionID).Count() >= 0)
+                    {
+                        foreach (var items in Model.Selects.Where(s => s.QuestionID == item.QuestionID))
+                        {
+                            if (items.Type)
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-checkbox">
+                                            <input type="checkbox" name="@items.SelectID">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除?", Url = Url.Action("DelSelect", new { items.SelectID, Model.QuestionaryID }), UpdateTargetId = "Questions", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "Del", data_toggle = "tooltip", title = "删除" })
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-checkbox">
+                                            <input type="checkbox" name="@items.SelectID">
+                                            <span>@items.Value</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除?", Url = Url.Action("DelSelect", new { items.SelectID, Model.QuestionaryID }), UpdateTargetId = "Questions", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "Del", data_toggle = "tooltip", title = "删除" })
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                    }
+                }
+                else
+                {
+                    if (Model.Selects.Where(s => s.QuestionID == item.QuestionID).Count() >= 0)
+                    {
+                        foreach (var items in Model.Selects.Where(s => s.QuestionID == item.QuestionID))
+                        {
+                            if (items.Type)
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-radio">
+                                            <input type="radio" name="@items.SelectID">
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control"/>
+                                    </div>
+                                    <div class="form-group">
+                                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除?", Url = Url.Action("DelSelect", new { items.SelectID, Model.QuestionaryID }), UpdateTargetId = "Questions", OnBegin = "OnBegin", OnSuccess = "OnAddSuccess", OnFailure = "OnDelFailure" }, new { id = "Del", data_toggle = "tooltip", title = "删除" })
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-radio">
+                                            <input type="radio" name="@items.SelectID">
+                                            <span>@items.Value</span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除?", Url = Url.Action("DelSelect", new { items.SelectID, Model.QuestionaryID }), UpdateTargetId = "Questions", OnBegin = "OnBegin", OnSuccess = "OnAddSuccess", OnFailure = "OnDelFailure" }, new { id = "Del", data_toggle = "tooltip", title = "删除" })
+                                    </div>
+
+                                </div>
+                            }
+
+                        }
+                    }
+
+                }
+            </div>
+            <footer class="card-footer">
+                <button type="button" class="btn btn-primary" onclick="AddSelect('@item.QuestionID')">添加选项</button>
+            </footer>
+        </div>
+    </div>
+    if (count % 3 == 0)
+    {
+        <div class="clearfix"></div>
+    }
+}
+
+<script type="text/javascript">
+
+
+    $(document).ready(
+        function DealLink() {
+            $("[id=Del]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+        }
+    );
+</script>

@@ -1,0 +1,41 @@
+﻿@model GameClub.ViewModels.MyUserInfoViewModel
+@{
+    ViewBag.Title = "后台首页";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section main{
+    <div class="container-fluid">
+        <h2>Hello World</h2>
+        <p>@DateTime.Now</p>
+    </div>
+    @if (Model.InformMessage != null)
+    {
+        <div class="modal fade" id="InformMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">@Model.InformMessage.Title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>@Model.InformMessage.Context</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+@section script{
+        <script type="text/javascript">
+            $(document).ready(
+                function ShowModal() {
+                    $('#InformMessageModal').modal('show');
+                }
+            );
+        </script>
+    }
+

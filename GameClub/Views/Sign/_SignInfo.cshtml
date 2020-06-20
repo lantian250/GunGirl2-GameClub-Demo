@@ -1,0 +1,40 @@
+﻿@model GameClub.ViewModels.SignInfoViewModel
+    @{ Html.RenderPartial("_SignInfoPageTable", Model);}
+<div class="text-center">
+    @Ajax.Pager(Model.SignInfoPageTable, new PagerOptions { AutoHide = false, PageIndexParameterName = "PageID", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>" }).AjaxOptions(a => a.SetUpdateTargetId("SignInfoPageTable").SetDataFormId("SearchForm"))
+</div>
+<script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+    function OnDelSuccess() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除签到信息成功!', 'success', 3000);
+            }, 1e3)
+        }
+    function OnDelFailure() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除签到信息失败!', 'danger', 3000);
+            }, 1e3)
+        }
+    function DealInput() {
+            $("[id=pageIdInput]").each(function () { $(this).val("@Model.PageID") })
+            $("[id=CurrentSortInput]").each(function () { $(this).val("@Model.CurrentSort") })
+            $("[id=SortByInput]").each(function () { $(this).val("@Model.SortBy") })
+            $('#SearchForm').submit();
+            }
+    $(document).ready(
+        function DealLink() {
+            $("[id=EditLink]").each(function () { $(this).html("<i class='mdi mdi-pencil'></i>") })
+            $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+            $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            $("[id=pageIdInput]").each(function () { $(this).val("@Model.PageID") })
+        }
+    );
+
+</script>
+

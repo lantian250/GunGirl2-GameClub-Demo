@@ -1,0 +1,125 @@
+﻿@using GameClub.Models
+@model GameClub.ViewModels.ShowGameMemberViewModel
+@{
+    int count = 0;
+    Layout = null;
+    SignList signList;
+    Contribution contribution;
+    MemberGroup memberGroup;
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>团员活动历史记录</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/style.min.css" rel="stylesheet">
+    <link href="~/Scripts/jconfirm/jquery-confirm.min.css" />
+</head>
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <aside class="lyear-layout-sidebar hidden">
+                <div class="lyear-layout-sidebar-scroll hidden">
+                </div>
+            </aside>
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>@Model.GameMember.GameID @Model.GameMember.GameName 的最近十条活动记录</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>编号</th>
+                                                <th>@Html.DisplayNameFor(m => m.GameMember.GameID)</th>
+                                                <th>@Html.DisplayNameFor(m => m.GameMember.GameName)</th>
+                                                <th>@Html.DisplayNameFor(m => m.SignInfos.FirstOrDefault().SignID)</th>
+                                                <th>类型</th>
+                                                <th>@Html.DisplayNameFor(m => m.SignInfos.FirstOrDefault().SignCondition)</th>
+                                                <th>@Html.DisplayNameFor(m => m.SignInfos.FirstOrDefault().SignDatetime)</th>
+                                                <th>@Html.DisplayNameFor(m => m.SignInfos.FirstOrDefault().VoiceCondition)</th>
+                                                <th>@Html.DisplayNameFor(m => m.SignInfos.FirstOrDefault().IsLeave)</th>
+                                                <th>@Html.DisplayNameFor(m => m.SignInfos.FirstOrDefault().Deal)</th>
+                                                <th>@Html.DisplayNameFor(m => m.Contributions.FirstOrDefault().AllContribution)</th>
+                                                <th>@Html.DisplayNameFor(m => m.Contributions.FirstOrDefault().MinSpeed)</th>
+                                                <th>@Html.DisplayNameFor(m => m.MemberGroups.FirstOrDefault().GroupName)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.SignInfos)
+                                            {
+                                                signList = Model.SignLists.Where(s => s.SignID == item.SignID).FirstOrDefault();
+                                                contribution = Model.Contributions.Where(c => c.ContributionID == signList.ContributionID).FirstOrDefault();
+                                                memberGroup = Model.MemberGroups.Where(m => m.MemberGroupID==signList.MemberGroupID).FirstOrDefault();
+                                                <tr>
+                                                    <td>@(++count)</td>
+                                                    <td>@Model.GameMember.GameID</td>
+                                                    <td>@Model.GameMember.GameName</td>
+                                                    <td>@item.SignID</td>
+                                                    <td>@(signList==null?" ":signList.Type)</td>
+                                                    <td>@item.SignCondition</td>
+                                                    <td>@item.SignDatetime</td>
+                                                    <td>@item.VoiceCondition</td>
+                                                    <td>@(item.IsLeave==true?"请假":"未请假")</td>
+                                                    <td>@item.Deal</td>
+                                                    @if (contribution != null)
+                                                    {
+                                                        <td>@contribution.AllContribution</td>
+                                                        <td>@contribution.MinSpeed</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td></td>
+                                                        <td></td>
+                                                    }
+                                                    @if (memberGroup!=null)
+                                                    {
+                                                        <td>@memberGroup.GroupName</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <footer class="card-footer"></footer>
+                        </div>
+                    </div>
+                </div>
+                <div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/perfect-scrollbar.min.js"></script>
+    <script src="~/Scripts/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/lightyear.js"></script>
+    <script type="text/javascript" src="~/Scripts/main.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+
+    <script type="text/javascript" src="~/Content/wangEditor/wangEditor.min.js"></script>
+    <script type="text/javascript">
+    </script>
+</body>
+</html>
+

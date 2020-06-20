@@ -1,0 +1,43 @@
+﻿@model GameClub.ViewModels.ContributionViewModel
+@{
+    AjaxOptions ajaxOptionsSave = new AjaxOptions
+    {
+        Url = Url.Action("DealContributionManageSave", "Contribution"),
+        OnSuccess = "OnSuccess",
+        OnBegin = "OnBegin",
+        UpdateTargetId = "TabContent",
+    };
+}
+@if (Model.ContributionList != null)
+{
+    <div class="tab-pane fade row active in " id="noWrite">
+        @using (Ajax.BeginForm(null, null, ajaxOptionsSave, new { id = "TableNoForm" }))
+        {
+            <input type="text" name="ContributionID" value="@Model.ContributionList.ContributionID" hidden />
+            <input hidden type="text" id="TabSign" value="noWrite" />
+            if (Model.Contributions != null && Model.Contributions.Count() != 0)
+            {
+                <div>
+                    @Html.Partial("_noWrite", Model)
+                </div>
+            }
+        }
+    </div>
+    <div class="tab-pane row fade" id="yesWrite">
+        @using (Ajax.BeginForm(null, null, ajaxOptionsSave, new { id = "TableYesForm" }))
+        {
+            <input type="text" name="ContributionID" value="@Model.ContributionList.ContributionID" hidden />
+            <input hidden type="text" id="TabSign" value="yesWrite" />
+            if (Model.Contributions != null && Model.Contributions.Count() != 0)
+            {
+                <div>
+                    @Html.Partial("_yesWrite", Model)
+                </div>
+            }
+        }
+    </div>
+}
+else
+{
+    <h4>当前无表可操作</h4>
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="da57e4403e99414aaf67557030bfe295" Name="Diagram1">
+        <EntityTypeShape EntityType="GameClubModel.Authority" Width="1.5" PointX="7.625" PointY="0.75" />
+        <EntityTypeShape EntityType="GameClubModel.Contribution" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="GameClubModel.ContributionList" Width="1.5" PointX="3" PointY="4.5" />
+        <EntityTypeShape EntityType="GameClubModel.GameAuthority" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="GameClubModel.GameMember" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="GameClubModel.MemberGroup" Width="1.5" PointX="6" PointY="5" />
+        <EntityTypeShape EntityType="GameClubModel.MemberGroupList" Width="1.5" PointX="0.75" PointY="4.625" />
+        <EntityTypeShape EntityType="GameClubModel.SignInfo" Width="1.5" PointX="10.5" PointY="4.625" />
+        <EntityTypeShape EntityType="GameClubModel.SignList" Width="1.5" PointX="8.25" PointY="4.375" />
+        <EntityTypeShape EntityType="GameClubModel.UserInfo" Width="1.5" PointX="10" PointY="1" />
+        <AssociationConnector Association="GameClubModel.FK_UserInfo_Authority" />
+        <AssociationConnector Association="GameClubModel.FK_Contribution_ContributionList" />
+        <AssociationConnector Association="GameClubModel.FK_Contribution_GameMember" />
+        <AssociationConnector Association="GameClubModel.FK_ContributionList_MemberGroupList" />
+        <AssociationConnector Association="GameClubModel.FK_ContributionList_SignList" />
+        <AssociationConnector Association="GameClubModel.FK_MemberGroupList_ContributionList" />
+        <AssociationConnector Association="GameClubModel.FK_SignList_ContributionList" />
+        <AssociationConnector Association="GameClubModel.FK_GameMember_GameAuthority" />
+        <AssociationConnector Association="GameClubModel.FK_MemberGroup_GameMember" />
+        <AssociationConnector Association="GameClubModel.FK_SignInfo_GameMember" />
+        <AssociationConnector Association="GameClubModel.FK_MemberGroup_MemberGroupList" />
+        <AssociationConnector Association="GameClubModel.FK_MemberGroupList_SignList" />
+        <AssociationConnector Association="GameClubModel.FK_SignList_MemberGroupList" />
+        <AssociationConnector Association="GameClubModel.FK_SignInfo_SignList" />
+        <EntityTypeShape EntityType="GameClubModel.InformMessage" Width="1.5" PointX="12.125" PointY="1.125" />
+        <EntityTypeShape EntityType="GameClubModel.FillOut" Width="1.5" PointX="7.5" PointY="8.625" />
+        <EntityTypeShape EntityType="GameClubModel.Question" Width="1.5" PointX="2.625" PointY="8.75" />
+        <EntityTypeShape EntityType="GameClubModel.Questionary" Width="1.5" PointX="0.625" PointY="8.625" />
+        <EntityTypeShape EntityType="GameClubModel.Select" Width="1.5" PointX="5" PointY="9" />
+        <AssociationConnector Association="GameClubModel.FK_FillOut_GameMember" />
+        <AssociationConnector Association="GameClubModel.FK_FillOut_Question" />
+        <AssociationConnector Association="GameClubModel.FK_FillOut_Questionary" />
+        <AssociationConnector Association="GameClubModel.FK_FillOut_Select" />
+        <AssociationConnector Association="GameClubModel.FK_Question_Questionary" />
+        <AssociationConnector Association="GameClubModel.FK_Select_Question" />
+        <EntityTypeShape EntityType="GameClubModel.Article" Width="1.5" PointX="9.5" PointY="8.75" />
+        <EntityTypeShape EntityType="GameClubModel.Feedback" Width="1.5" PointX="11.75" PointY="8.625" />
+        <EntityTypeShape EntityType="GameClubModel.UserOperateRecord" Width="1.5" PointX="12.625" PointY="4.75" />
+        <EntityTypeShape EntityType="GameClubModel.UserLoginRecord" Width="1.5" PointX="13.5" PointY="7.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

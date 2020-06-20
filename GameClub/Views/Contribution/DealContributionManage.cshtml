@@ -1,0 +1,92 @@
+﻿@model GameClub.ViewModels.ContributionViewModel
+@{
+    ViewBag.Title = "填写贡献表信息";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card">
+                <div class="card-header">
+                    <button type="button" name="formsubmit" class="btn btn-primary m-r-5" onclick="TableSubmit()">保存当前页面信息</button>
+                    <div class="col-md-3 pull-right">
+                        <select class="form-control " id="ContributionID" onchange="OnSelect()" size="1">
+                            @if (Model.ContributionList != null)
+                            {
+                                <option value="@Model.ContributionList.ContributionID" selected>@Model.ContributionList.ContributionID @Model.ContributionList.Type</option>
+                            }
+                            @if ((Model.ContributionLists == null) || (Model.ContributionLists.Count() == 0))
+                            {
+                                <option value="null">暂无可选择的贡献表</option>
+                            }
+                            else
+                            {
+                                <option value="">请选择</option>
+                                foreach (var item in Model.ContributionLists)
+                                {
+
+                                    <option value="@item.ContributionID">@item.ContributionID @item.Type</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                   
+                </div>
+                <div class="card-body">
+
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active">
+                            <a data-toggle="tab" href="#noWrite" onclick="ChangeTabSign('noWrite')">未填写</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#yesWrite" onclick="ChangeTabSign('yesWrite')">已填写</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="TabContent">
+                        @Html.Partial("_TabContent", Model)
+                    </div>
+                    <input hidden type="text" id="TabSign" value="noWrite" />
+                    @using (Ajax.BeginForm("", null, null, new AjaxOptions { UpdateTargetId = "TabContent", Url = Url.Action("DealContributionManage", "Contribution") }, new { id = "ChangeDealContributionManage" }))
+                    {
+                        <input hidden type="text" name="ContributionID" id="ChangeContributionID" value="" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section script{
+    <script type="text/javascript">
+
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('保存成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function TableSubmit() {
+            var TabSign = $('#TabSign').val();
+            if (TabSign == "noWrite") {
+                $('#TableNoForm').submit();
+            }
+            else {
+                $('#TableYesForm').submit();
+            }
+
+        }
+        function ChangeTabSign(TabSign) {
+            $('#TabSign').val(TabSign);
+        }
+        function OnSelect() {
+            var ContributionID = $('#ContributionID').val();
+            if (ContributionID != "") {
+                $('#ChangeContributionID').val(ContributionID);
+                $('#ChangeDealContributionManage').submit();
+            }
+            
+        }
+    </script>
+}

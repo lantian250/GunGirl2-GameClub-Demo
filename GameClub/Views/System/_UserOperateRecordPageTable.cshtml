@@ -1,0 +1,29 @@
+﻿@using GameClub.Models
+@model PagedList<UserOperateRecord>
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.UserID)</th>
+            <th>@Html.DisplayNameFor(m => m.UserName)</th>
+            <th>@Html.DisplayNameFor(m => m.OperateContext)</th>
+            <th>@Html.DisplayNameFor(m => m.RecordTime)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(Model.StartItemIndex + count++)</td>
+                <td>@item.UserID</td>
+                <td>@item.UserName</td>
+                <td>@item.OperateContext</td>
+                <td>@item.RecordTime</td>
+            </tr>
+        }
+    </tbody>
+</table>

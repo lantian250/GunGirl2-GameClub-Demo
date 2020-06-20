@@ -1,0 +1,28 @@
+﻿@using GameClub.Models;
+@model PagedList<UserLoginRecord>
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.HostIP)</th>
+            <th>@Html.DisplayNameFor(m => m.Area)</th>
+            <th>@Html.DisplayNameFor(m => m.RecordTime)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(Model.StartItemIndex + count++)</td>
+                <td>@item.HostIP</td>
+                <td>@item.Area</td>
+                <td>@item.RecordTime</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

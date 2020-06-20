@@ -1,0 +1,17 @@
+﻿@model GameClub.ViewModels.ArticleViewModel
+    @{ 
+
+    }
+@if (Model.ArticlePagedList.Count() > 0)
+{
+<ul class="list-group">
+    @foreach (var item in Model.ArticlePagedList)
+    {
+    <li class="list-group-item row">
+        <a class="col-md-6" href="@Url.Action("ShowArticle","Relevant",new { item.ArticleID})" target="_blank">@item.Title  @item.CreateTime.ToString("yyyy年MM月dd日 HH:mm")</a>
+        <a href="@Url.Action("EditArticle",new { item.ArticleID})"  title="编辑" data-toggle="tooltip" class="pull-right"><i class="mdi mdi-pencil"></i></a>
+        <a href="@Url.Action("DelArticle",new { item.ArticleID})" onclick="return confirm('确定是否删除?');" title="删除" data-toggle="tooltip" class="pull-right"><i class="mdi mdi-close-box"></i></a>
+    </li>
+    }
+</ul>
+}

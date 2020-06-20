@@ -1,0 +1,56 @@
+﻿@using GameClub.Models
+@model IEnumerable<SignInfo>
+@{
+
+    ViewBag.Title = "个人签到历史记录";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>个人签到历史记录(仅显示最近20条信息)</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>@Html.DisplayNameFor(m => m.SignID)</th>
+                                        <th>@Html.DisplayNameFor(m => m.SignCondition)</th>
+                                        <th>@Html.DisplayNameFor(m => m.SignDatetime)</th>
+                                        <th>@Html.DisplayNameFor(m => m.IsLeave)</th>
+                                        <th>@Html.DisplayNameFor(m => m.Deal)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@(++count)</td>
+                                            <td>@item.SignID</td>
+                                            <td>@item.SignCondition</td>
+                                            <td>@item.SignDatetime</td>
+                                            <td>@(item.IsLeave==false?"未请假":"请假")</td>
+                                            <td>@item.Deal</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+}
+
+@section script{
+
+}

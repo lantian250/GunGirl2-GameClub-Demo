@@ -1,0 +1,237 @@
+﻿@model GameClub.ViewModels.SignListViewModel
+@{
+    ViewBag.Title = "社团签到表管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "signListsPageList",
+        Url = Url.Action("SignListManage"),
+        //OnBegin = "OnBegin",
+        //OnSuccess = "OnSearchSuccess",
+        //OnFailure = "OnSearchFailure",
+    };
+
+    AjaxOptions ajaxOptionImport = new AjaxOptions
+    {
+        UpdateTargetId = "signListsPageList",
+        Url = Url.Action("ImportSignInfo"),
+        OnBegin = "OnBegin",
+        OnSuccess = "OnImportSuccess",
+        OnFailure = "OnImportFailure",
+    };
+
+    AjaxOptions ajaxOptionAdd = new AjaxOptions
+    {
+        UpdateTargetId = "AddSignList",
+        Url = Url.Action("GetAddSignList"),
+        //OnBegin = "OnBegin",
+        OnSuccess = "GetAddModal",
+        //OnFailure = "OnSearchFailure",
+    };
+    AjaxOptions DealList = new AjaxOptions
+    {
+        Url = Url.Action("DealSignList"),
+        Confirm = "确定这样做？",
+        OnBegin = "OnBegin",
+        OnSuccess = "OnDealListSuccess",
+        OnFailure = "OnDealListFailure",
+        UpdateTargetId = "signListsPageList"
+    };
+}
+
+@section main{
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-toolbar clearfix">
+                    <div class="pull-right search-bar">
+                        @using (Ajax.BeginForm(null, null, ajaxOptions, new { id = "SearchForm" }))
+                        {
+                            @*@Html.Hidden("PageSize", Model.PageID)
+                                @Html.Hidden("pageId", Model.PageID)*@
+                            <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.pageSize" />
+                            <input hidden type="text" name="pageId" id="pageIdInput" value="@Model.pageID" />
+                            <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                            <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                            <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="留空搜索展示所有内容" value="@Model.keyword">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-secondary" id="search-btn" type="submit" accesskey="on"><i class="mdi mdi-search-web"></i> 搜索</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div class="toolbar-btn-action">
+                        @*<button type="button" class="btn btn-primary m-r-5" data-toggle="modal" data-target="#AddSignListModal"><i class="mdi mdi-plus"></i> 新增</button>*@
+                        @using (Ajax.BeginForm(null, null, ajaxOptionAdd, new { id = "AddForm" }))
+                        {
+                            <input hidden type="text" name="pageSize" id="PageSizeInput" value="@Model.pageSize" />
+                            <input hidden type="text" name="pageId" id="pageIdInput" value="@Model.pageID" />
+                            <input hidden type="text" name="CurrentSort" id="CurrentSortInput" value="@Model.CurrentSort" />
+                            <input hidden type="text" name="SortBy" id="SortByInput" value="@Model.SortBy" />
+                            <input hidden type="text" name="IsOrderBy" id="IsOrderByInput" value="false" />
+
+
+                        }
+                        @*@Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetAddSignList", new { Model.pageID, Model.pageSize, Model.keyword }), UpdateTargetId = "AddSignList", OnSuccess = "GetAddModal" }, new { id = "AddLink", type = "button", @class = "btn btn-primary m-r-5" })*@
+                        <button type="button" name="formsubmit" class="btn btn-primary m-r-5" onclick="AddSubmit()"><i class="mdi mdi mdi-plus"></i> 新增</button>
+                        <button type="button" name="formsubmit" class="btn btn-danger m-r-5" onclick="TableSubmit('删除');" value="删除"><i class="mdi mdi-window-close"></i> 删除</button>
+                        <button type="button" name="formsubmit" class="btn btn-success m-r-5" onclick="TableSubmit('启用');" value="启用"><i class="mdi mdi-check"></i> 启用</button>
+                        <button type="button" name="formsubmit" class="btn btn-warning m-r-5" onclick="TableSubmit('禁用');" value="禁用"><i class="mdi mdi-block-helper"></i> 禁用</button>
+
+
+                        <div class="btn-group">
+                            <button type="button" id="PageSizeMenu" class="btn btn-secondary dr/opdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                单页显示数量:@(Model.pageSize)条 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a onclick="PageSize(20)">20条</a></li>
+                                <li><a onclick="PageSize(30)">30条</a></li>
+                                <li><a onclick="PageSize(50)">50条</a></li>
+                                <li><a onclick="PageSize(100)">100条</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @using (Ajax.BeginForm(null, null, DealList, new { id = "TableForm" }))
+                    {
+                        <input hidden type="text" name="formsubmit" id="DealAction" />
+                        <div id="signListsPageList"  class="table-responsive">
+                            @Html.Partial("_SignList", Model)
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="AddSignList">
+        @Html.Partial("_SignListAdd", Model)
+    </div>
+    <div id="EditSignList">
+        @Html.Partial("_SignListEdit", Model)
+    </div>
+
+    <div class="modal fade" id="ImportSignInfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">导入语音情况</h4>
+                </div>
+                @using (Ajax.BeginForm(" ",null,null,ajaxOptionImport,new { enctype = "multipart/form-data" }))
+                {
+                    @Html.HiddenFor(m => m.pageID)
+                    @Html.HiddenFor(m => m.pageSize)
+                    @Html.HiddenFor(m => m.keyword)
+                    @Html.HiddenFor(m => m.CurrentSort)
+                    @Html.HiddenFor(m => m.SortBy)
+                    @Html.Hidden("IsOrderBy", false)
+                <div class="modal-body">
+                    @Html.ValidationSummary()
+                    <input type="text"  hidden id="ImportSignID" name="SignID" value=""/>
+                    <div class="form-group">
+                        <a href="@Url.Action("ExportSignInfo", "Sign")">下载样本文件</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="File" class="control-label">导入文件：</label>
+                        <input type="file" class="form-control" id="File" name="file">
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('确定提交吗?默认会覆盖原有签到语音数据');">保存</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+    <script type="text/javascript">
+
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnSearchSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('查询成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnSearchFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('查询失败!', 'danger', 3000);
+            }, 1e3)
+        }
+        function GetAddModal() {
+            $('#AddSignListModal').modal("show")
+        }
+        function GetEditModal() {
+            $('#EditSignListModal').modal("show")
+        }
+        function PageSize(pagesize) {
+            $('#PageSizeMenu').html("单页显示数量:" + pagesize + "条 <span class='caret'></span>")
+            //$('#PageSizeInput').each().val(pagesize);
+            $("[id=PageSizeInput]").each(function () { $(this).val(pagesize) })
+            $('#SearchForm').submit();
+        }
+        function AddSubmit() {
+            $('#AddForm').submit();
+        }
+        function TableSubmit(Action) {
+            $('#DealAction').val(Action);
+            $('#TableForm').submit();
+        }
+        function OnDealListSuccess() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('操作成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnDealListFailure() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('操作失败!', 'success', 3000);
+            }, 1e3)
+        }
+
+        function ImportFile(SignID) {
+            $('#ImportSignID').val(SignID);
+            $('#ImportSignInfoModal').modal("show")
+        }
+        function OnImportSuccess() {
+            $('#SearchForm').submit();
+            $('#ImportSignInfoModal').modal("hide")
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('导入成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnImportFailure() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('导入失败!', 'danger', 3000);
+            }, 1e3)
+        }
+
+        $(document).ready(
+            function DealLink() {
+                $("[id=EditLink]").each(function () { $(this).html("<i class='mdi mdi-pencil'></i>") })
+                $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+                $("[id=AddLink]").each(function () { $(this).html("<i class='mdi mdi-plus'></i> 新增") })
+                $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            }
+        );
+    </script>
+}

@@ -1,0 +1,93 @@
+﻿@model GameClub.ViewModels.SignListViewModel
+
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" id="check-all"><span></span>
+                </label>
+            </th>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.signList.SignID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "SignID", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.signList.Type)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "Type", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.signList.Active)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "Active", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.signList.ContributionID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "ContributionID", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.signList.MemberGroupID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "MemberGroupID", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.signList.StartDateTime)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "StartDateTime", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.signList.EndDateTime)@Ajax.ActionLink(" ", null, null, new AjaxOptions {OnSuccess= "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "EndDateTime", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.signList.CreateTime)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "signListsPageList", Url = Url.Action("SignListManage", "Sign", new { sortBy = "CreateTime", currentSort = Model.CurrentSort, Model.pageID, Model.pageSize, Model.keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.HiddenFor(m => m.pageID)
+        @Html.HiddenFor(m => m.pageSize)
+        @Html.HiddenFor(m => m.keyword)
+        @Html.HiddenFor(m => m.CurrentSort)
+        @Html.HiddenFor(m => m.SortBy)
+        @Html.Hidden("IsOrderBy", false)
+        @foreach (var item in Model.signListsPageList)
+        {
+            <tr>
+                <td>
+                    <label class="lyear-checkbox checkbox-primary">
+                        <input type="checkbox" name="listid" value="@item.SignID"><span></span>
+                    </label>
+                </td>
+                <td>@(Model.signListsPageList.StartItemIndex + count++)</td>
+                <td><a href="@Url.Action("SignInfoManage","Sign",new { keyword=item.SignID})">@item.SignID</a></td>
+                <td>@item.Type</td>
+                <td>
+                    @if (item.Active)
+                    {
+                        <font class="text-success">启用</font>
+                    }
+                    else
+                    {
+                        <font class="text-danger">禁用</font>
+                    }
+                </td>
+                <td><a href="@Url.Action("ContributionListManage","Contribution",new { Keyword=item.ContributionID})">@item.ContributionID</a></td>
+                <td><a href="@Url.Action("MemberGroupListManage","MemberGroup",new { Keyword=item.MemberGroupID})">@item.MemberGroupID</a></td>
+                <td>@item.StartDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.EndDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.CreateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <div class="btn-group">
+                        @*<button id="EditLink" type="button" class="btn btn-xs btn-default" title="编辑" data-toggle="tooltip"></button>*@
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetSignList", new { SignID = item.SignID, Model.pageID, Model.pageSize, Model.keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "EditSignList", OnSuccess = "GetEditModal" }, new { id = "EditLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑" })
+                        @*<button id="DelLink" type="button" class="btn btn-xs btn-default" onclick="return confirm('确定是否删除?');" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></button>*@
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("DelSignList", new { SignID = item.SignID, Model.pageID, Model.pageSize, Model.keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "signListsPageList", Confirm = "确实是否删除！", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", type = "button", @class = "btn btn-xs btn-default", title = "删除"})
+                        <a class="btn btn-xs btn-default" href="@Url.Action("ExportSignInfo","Sign",new { item.SignID})" title="导出" data-toggle="tooltip"><i class="mdi mdi-file-import"></i></a>
+                        <a class="btn btn-xs btn-default" onclick="ImportFile(@item.SignID)" title="导入" data-toggle="tooltip"><i class="mdi mdi-file-export"></i></a>
+                    </div>
+                </td>
+            </tr>
+        }
+        @*@if (Model.signListsPageList.Count < Model.pageSize)
+            {
+                for (int i = 0; i < Model.pageSize - Model.signListsPageList.Count; i++)
+                {
+                    <tr>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                        <td><input type="text"/></td>
+                    </tr>
+                }
+
+            }*@
+    </tbody>
+</table>

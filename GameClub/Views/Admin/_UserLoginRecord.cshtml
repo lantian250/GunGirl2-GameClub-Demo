@@ -1,0 +1,6 @@
+﻿@using GameClub.Models;
+@model PagedList<UserLoginRecord>
+    @{ Html.RenderPartial("_UserLoginRecordPageTable", Model);}
+<div class="text-center">
+    @Ajax.Pager(Model, new PagerOptions { AutoHide = false, PageIndexParameterName = "PageIndex", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>" }).AjaxOptions(a => a.SetUpdateTargetId("MemberGroupListPageTable").SetDataFormId("SearchForm"))
+</div>

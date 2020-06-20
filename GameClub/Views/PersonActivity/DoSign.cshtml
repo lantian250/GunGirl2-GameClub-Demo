@@ -1,0 +1,38 @@
+﻿@model GameClub.ViewModels.DoSignViewModel
+@{
+    ViewBag.Title = "进行签到";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    
+}
+
+@section main{
+
+    <div class="container-fluid">
+        <div class="row" id="DoSignCard">
+            @Html.Partial("_DoSign", Model);
+        </div>
+    </div>
+}
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+
+    <script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnSignSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('签到成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnSignFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('签到失败!', 'danger', 3000);
+            }, 1e3)
+        }
+    </script>
+
+}

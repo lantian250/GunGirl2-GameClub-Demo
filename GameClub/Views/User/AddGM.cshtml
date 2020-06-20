@@ -1,0 +1,48 @@
+﻿@model GameClub.ViewModels.AllUserInfoViewModel
+
+
+<div class="modal fade" id="AddGMModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增用户</h4>
+            </div>
+            @using (Html.BeginForm("AddGM", "User", new { id = Model.PageID, returnUrl = Model.returnUrl, keyword = Model.keyword, pagesize = Model.PageSize, Model.CurrentSort, Model.SortBy }, FormMethod.Post))
+            {
+                if (Model.GameMembers == null)
+                {
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">当前没有团员需要添加账号</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" href="@Url.Action("Index",new {id=Model.PageID,keyword=Model.keyword,pagesize=Model.PageSize,Model.CurrentSort,Model.SortBy})">关闭</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="CreateAccount" class="control-label">未添加账号的团员：</label>
+                            @foreach (var item in Model.GameMembers)
+                            {
+                                <label class="lyear-checkbox checkbox-primary checkbox-inline">
+                                    <input type="checkbox" value="@item.GameID.@item.GameName" name="GameMember">
+                                    <span>@item.GameID @item.GameName</span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                        <button type="submit" class="btn btn-primary">添加</button>
+                    </div>
+                }
+
+            }
+
+        </div>
+    </div>
+</div>

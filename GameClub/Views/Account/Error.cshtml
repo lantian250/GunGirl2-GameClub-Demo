@@ -1,0 +1,28 @@
+﻿
+
+@if (ViewBag.Success != null)
+{
+    <script type="text/javascript">
+        function OnSuccess() {
+            window.location.href = "/account/login";
+        }
+        function OnComplete() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Success', 'success', 3000);
+            }, 1e3)
+        }
+    </script>
+}
+else if (ViewBag.Fault != null)
+{
+    <script type="text/javascript">
+        function OnSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Fault', 'danger', 3000);
+            }, 1e3)
+        }
+
+    </script>
+}

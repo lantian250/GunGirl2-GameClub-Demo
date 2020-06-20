@@ -1,0 +1,57 @@
+﻿@model GameClub.ViewModels.AllUserInfoViewModel
+    @{ 
+        int num = 0;
+    }
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">新增用户</h4>
+            </div>
+            @using (Html.BeginForm("Add", "User",new {id=Model.PageID, returnUrl = Model.returnUrl, keyword = Model.keyword,pagesize=Model.PageSize, Model.CurrentSort, Model.SortBy },FormMethod.Post))
+            {
+            <div class="modal-body">
+                @Html.ValidationMessage("UserIDError")
+                <div class="form-group">
+                    <label for="recipient-name" class="control-label">用户ID：</label>
+                    <input type="text" class="form-control" id="UserID" name="UserID" autocomplete="off">
+                </div>
+                @Html.ValidationMessage("UserName")
+                <div class="form-group">
+                    <label for="message-text" class="control-label">用户昵称：</label>
+                    <input type="text" class="form-control" id="UserName" name="UserName" autocomplete="off">
+                </div>
+                @Html.ValidationMessage("AuthorityError")
+                <div class="form-group">
+                    <label for="message-text" class="control-label">用户权限：</label>
+                    <div>
+                        <select class="form-control" id="Authority" name="Authority" size="1" >
+                            @foreach (var item in Model.Authorities)
+                            {
+                                num++;
+                                if (num == Model.Authorities.Count)
+                                {
+                                    <option value="@item.Number" selected>@item.AuthorityString</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Number">@item.AuthorityString</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary m-r-5" onclick="AddGMModel()"><i class="mdi mdi-plus"></i>为团员添加账号</button>
+                <a class="btn btn-default" data-dismiss="modal">关闭</a>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>

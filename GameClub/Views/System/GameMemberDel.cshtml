@@ -1,0 +1,67 @@
+﻿@using GameClub.Models
+@model PagedList<GameMember>
+@{
+    ViewBag.Title = "删除团员记录";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>删除用户记录</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="GameMemberPageTable"  class="table-responsive">
+                            @Html.Partial("_GameMemberDel", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section script{
+    @{ Html.RegisterMvcPagerScriptResource();}
+    <script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnDelSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnDelFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除失败!', 'danger', 3000);
+            }, 1e3)
+        }
+        function OnResetSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('恢复成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnResetFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('恢复失败!', 'danger', 3000);
+            }, 1e3)
+        }
+        $(document).ready(
+            function DealLink() {
+                $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+                $("[id=ResetLink]").each(function () { $(this).html("<i class='mdi mdi-lock-reset'></i>") })
+            }
+        );
+    </script>
+}
+
+
+

@@ -1,0 +1,52 @@
+﻿@model GameClub.ViewModels.QuestionaryViewModel
+@{
+
+}
+<div class="row">
+    @foreach (var item in Model.Questionaries)
+    {
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary">
+                    <h4>@item.Title</h4>
+                    <ul class="card-actions">
+                        <li>
+                            @*<button type="button" data-toggle="tooltip" title="删除"><i class="mdi mdi-close-box"></i></button>*@
+                            @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除?", Url = Url.Action("DelQuestionary", new { item.QuestionaryID }), UpdateTargetId = "QuestionaryPageTable", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "Del", data_toggle = "tooltip", title = "删除" })
+                        </li>
+                    </ul>
+                    <!-- .card-actions -->
+                </div>
+                <div class="card-body">
+                    <p>@item.Context</p>
+                    <p>开始时间：@item.StartTime.ToString("yyyy年MM月dd日 hh:mm") 结束时间：@item.EndTime.ToString("yyyy年MM月dd日 hh:mm")</p>
+                    <p></p>
+                    <p>创建时间：@item.CreateTime.ToString("yyyy年MM月dd日 hh:mm")</p>
+                    <p>问卷题目数量：@Model.Questions.Where(q => q.QuestionaryID == item.QuestionaryID).Count()</p>
+                    <p>填写问卷人数：@Model.FillOuts.Where(f => f.QuestionaryID == item.QuestionaryID).Select(f => f.GameID).Distinct().Count()</p>
+                </div>
+                <footer class="card-footer">
+                    @*<div class="example-left m-t-10 pull-left">
+                            <label class="lyear-checkbox">
+                                <input type="checkbox">
+                                <span>五天内自动登录</span>
+                            </label>
+                        </div>*@
+                    <div class="example-right pull-right">
+                        @if (item.EndTime < DateTime.Now)
+                        {
+                            <button class="btn btn-primary" href="@Url.Action("QuestionManage",new {item.QuestionaryID })" disabled>问卷已过期！</button>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary" href="@Url.Action("QuestionManage",new {item.QuestionaryID })">为问卷添加问题和内容</a>
+                        }
+                        <a class="btn btn-primary" href="@Url.Action("ShowQuestionaryResult",new {item.QuestionaryID })">查看问卷填写结果</a>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+    }
+</div>

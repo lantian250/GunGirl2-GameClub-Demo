@@ -1,0 +1,158 @@
+﻿@model GameClub.ViewModels.MemberGroupViewModel
+@{
+    ViewBag.Title = "分组分配";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    AjaxOptions ajaxOptionsSave = new AjaxOptions
+    {
+        Url = Url.Action("DealMemberGroupManageSave", "MemberGroup"),
+        OnSuccess = "OnSuccess",
+        OnFailure = "OnFailure",
+        OnBegin = "OnBegin",
+        UpdateTargetId = "TabContent",
+    };
+    AjaxOptions ajaxOptions = new AjaxOptions
+    {
+        Url = Url.Action("Inherit", "MemberGroup"),
+        OnSuccess = "OnInSuccess",
+        OnFailure = "OnInFailure",
+        OnBegin = "OnBegin",
+        UpdateTargetId = "TabContent"
+    };
+}
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="card">
+                <div class="card-header row">
+                    <div class="col-md-2">
+                        @using (Ajax.BeginForm(null, null, ajaxOptions, new { }))
+                        {
+                            <input hidden type="text" name="MemberGroupID" id="InheritMemberGroupID" value="" />
+                            <button type="submit" class="btn btn-primary ">继承上次相同类型的分组</button>
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" name="formsubmit" class="btn btn-primary" onclick="TableSubmit('猫组')">分配到猫组</button>
+                        <button type="button" name="formsubmit" class="btn btn-primary " onclick="TableSubmit('狗组')">分配到狗组</button>
+                        <button type="button" name="formsubmit" id="FishButton" class="btn btn-primary" onclick="TableSubmit('鱼组')">分配到鱼组</button>
+                    </div>
+                        <div class="col-md-3 pull-right">
+                        <select class="form-control " id="MemberGroupID" onchange="OnSelect()" size="1">
+                            @if (Model.MemberGroupList != null)
+                            {
+                                <option value="@Model.MemberGroupList.MemberGroupID" selected>@Model.MemberGroupList.MemberGroupID @Model.MemberGroupList.Type</option>
+                            }
+                            @if ((Model.MemberGroupLists == null) || (Model.MemberGroupLists.Count() == 0))
+                            {
+                                <option value="null">暂无可选择的分组表</option>
+                            }
+                            else
+                            {
+                                <option value="">请选择</option>
+                                foreach (var item in Model.MemberGroupLists)
+                                {
+                                    <option value="@item.MemberGroupID">@item.MemberGroupID @item.Type</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="card-body">
+                    @*<ul class="nav nav-tabs nav-justified">
+                        <li class="active">
+                            <a data-toggle="tab" href="#DefaultGroup" onclick="ChangeTabSign('DefaultGroup')">未分组</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#CatGroup" onclick="ChangeTabSign('CatGroup')">猫组</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="tab" href="#DogGroup" onclick="ChangeTabSign('DogGroup')">狗组</a>
+                        </li>
+                        @if (Model.MemberGroupList.Type.Equals("团本"))
+                        {
+                            <li class="nav-item">
+                                <a data-toggle="tab" href="#FishGroup" onclick="ChangeTabSign('FishGroup')">鱼组</a>
+                            </li>
+                        }
+                    </ul>*@
+                    <div class="tab-content" id="">
+                        @using (Ajax.BeginForm(null, null, ajaxOptionsSave, new { id = "TableForm" }))
+                        {
+                            <input type="text" id="TabSign" name="TabSign" value="" hidden/>
+                            <div id="TabContent">
+                                @Html.Partial("_TabContent", Model)
+                            </div>
+                        }
+                        </div>
+                    <input hidden type="text" id="TabSign" value="DefaultGroup" />
+                    @using (Ajax.BeginForm("", null, null, new AjaxOptions { UpdateTargetId = "TabContent", Url = Url.Action("DealMemberGroupManage", "MemberGroup") }, new { id = "ChangeDealMemberGroupManage" }))
+                    {
+                        <input hidden type="text" name="MemberGroupID" id="ChangeMemberGroupID" value="" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section script{
+    <script type="text/javascript">
+
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+        function OnSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('保存成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('保存失败!', 'danger', 3000);
+            }, 1e3)
+        }
+        function OnInSuccess() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('继承成功!', 'success', 3000);
+            }, 1e3)
+        }
+        function OnInFailure() {
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('继承失败,在离此表最近的三张表中未找到相同类型的表!', 'danger', 3000);
+            }, 1e3)
+        }
+        function TableSubmit(GroupName) {
+            $('#TabSign').val(GroupName);
+            $('#TableForm').submit();
+        }
+        function OnSelect() {
+            var MemberGroupID = $('#MemberGroupID').val();
+            if (MemberGroupID != "") {
+                $('#ChangeMemberGroupID').val(MemberGroupID);
+                $('#InheritMemberGroupID').val(MemberGroupID);
+                $('#ChangeDealMemberGroupManage').submit();
+            }
+
+        }
+        $(document).ready(
+        function DealButton() {
+            @if (Model.MemberGroupList!=null&&Model.MemberGroupList.Type.ToString().Equals("团本"))
+            {
+                <text>
+            $('#FishButton').show();
+                </text>
+            }
+            else
+            {
+                <text>
+            $('#FishButton').hide();
+                </text>
+            }
+        }
+    );
+    </script>
+}

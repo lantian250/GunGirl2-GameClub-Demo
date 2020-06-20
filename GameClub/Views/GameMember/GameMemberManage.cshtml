@@ -1,0 +1,121 @@
+﻿@model GameClub.ViewModels.GameMemberViewModel
+@{
+    ViewBag.Title = "社团团员管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-toolbar clearfix">
+                        <div class="pull-right search-bar">
+                            @using (Html.BeginForm("Search", "GameMember", FormMethod.Get))
+                            {
+                                @Html.Hidden("PageSize", Model.PageSize)
+                                @Html.Hidden("pageId", Model.PageID)
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="留空搜索展示所有内容">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-secondary" id="search-btn" type="submit" accesskey="on"><i class="mdi mdi-search-web"></i> 搜索</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @{ Html.BeginForm("DealList", "GameMember", FormMethod.Post);}
+                        <div class="toolbar-btn-action">
+                            <button type="button" class="btn btn-primary m-r-5" onclick="AddModel()"><i class="mdi mdi-plus"></i> 新增</button>
+                            <button type="submit" name="formsubmit" class="btn btn-danger" onclick="return confirm('确定是否删除选中项?');" value="删除"><i class="mdi mdi-window-close"></i> 删除选中项</button>
+                            <a class="btn btn-primary m-r-5" href="@Url.Action("ExportGameMember","GameMember")"><i class="mdi mdi-file-export"></i>导出社团团员信息</a>
+                            <a class="btn btn-primary m-r-5" onclick="ImportModel()"><i class="mdi mdi-file-import"></i>导入社团团员信息</a>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    单页显示数量:@(ViewBag.PageSize)条 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("GameMemberManage",new { pageid=Model.PageID,pagesize=20,keyword=Model.keyword,Model.SortBy,Model.CurrentSort,IsOrderBy=false})">20条</a></li>
+                                    <li><a href="@Url.Action("GameMemberManage",new { pageid=Model.PageID,pagesize=30,keyword=Model.keyword,Model.SortBy,Model.CurrentSort,IsOrderBy=false})">30条</a></li>
+                                    <li><a href="@Url.Action("GameMemberManage",new { pageid=Model.PageID,pagesize=50,keyword=Model.keyword,Model.SortBy,Model.CurrentSort,IsOrderBy=false})">50条</a></li>
+                                    <li><a href="@Url.Action("GameMemberManage",new { pageid=Model.PageID,pagesize=100,keyword=Model.keyword,Model.SortBy,Model.CurrentSort,IsOrderBy=false})">100条</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            @Html.HiddenFor(m => m.PageID)
+                            @Html.HiddenFor(m => m.PageSize)
+                            @Html.HiddenFor(m => m.keyword)
+                            @Html.HiddenFor(m => m.CurrentSort)
+                            @Html.HiddenFor(m => m.SortBy)
+                            @Html.Partial("_GameMemberTable", Model)
+                        </div>
+                        <div class="pager">
+                            <p>总共页数：@Model.GameMembersPagedList.TotalPageCount  总共记录数：@Model.GameMembersPagedList.TotalItemCount   当前页数：@Model.PageID 当前记录数:@Model.GameMembersPagedList.Count</p>
+                            @Html.Pager(Model.GameMembersPagedList, new PagerOptions { AutoHide = false, PageIndexParameterName = "pageID", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>", Id = "bootstrappager" })
+                        </div>
+                    </div>
+                    @{ Html.EndForm();}
+                </div>
+            </div>
+        </div>
+        @Html.Partial("Add", Model)
+        @Html.Partial("Edit", Model)
+        <div class="modal fade" id="ImportFileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">导入团员</h4>
+                    </div>
+                    @using (Html.BeginForm("ImportGameMember", "GameMember", new { pageid = Model.PageID, pagesize = Model.PageSize, keyword = Model.keyword, sortBy = Model.SortBy, currentsort = Model.CurrentSort, IsOrderBy = false }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <a href="@Url.Action("ExportGameMember", "GameMember", new { IsExample = true })">下载样本文件</a>
+                            </div>
+                            <div class="form-group">
+                                <label for="File" class="control-label">导入文件：</label>
+                                <input type="file" class="form-control" id="File" name="file">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary" onclick="return confirm('确定是否提交，将会以文件内容为主更新信息，数据库中已存在的成员如果在提交表中不存在，将会删除！');">保存</button>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section script{
+    <script type="text/javascript">
+        function AddModel() {
+            $('#AddModal').modal("show");
+        }
+        function EditModel() {
+            $('#EditModal').modal("show");
+        }
+        function ImportModel() {
+            $('#ImportFileModal').modal("show");
+        }
+        $(document).ready(
+            function DealLink() {
+                $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            }
+        );
+    </script>
+    @if (ViewBag.EditModal != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function EditModel() {
+                $('#EditModal').modal("show");
+            })
+        </script>
+    }
+}

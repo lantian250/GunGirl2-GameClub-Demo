@@ -1,0 +1,25 @@
+﻿@model GameClub.ViewModels.ContributionViewModel
+
+@if (Model.GameMembers != null)
+{
+    <label for="GameID" class="control-label">请选择团员ID：</label>
+    <div>
+        <select class="form-control" id="GameID" name="GameID" size="1">
+            @if (Model.GameMembers.Count() > 0)
+            {
+                <option value="" selected>请选择</option>
+                foreach (var item in Model.GameMembers)
+                {
+                    <option value="@item.GameID">@item.GameID @item.GameName</option>
+                }
+            }
+            else
+            {
+                <option value="" selected>暂时没有可选的团员</option>
+            }
+        </select>
+    </div>
+}
+
+
+

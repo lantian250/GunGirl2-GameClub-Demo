@@ -1,0 +1,28 @@
+﻿@model GameClub.ViewModels.FeedBackViewModel
+@{
+}
+@if (Model != null&&Model.Feedbacks.Count() > 0)
+{
+    <div class="row">
+        @foreach (var item in Model.Feedbacks)
+        {
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary ">
+                        <h4>@item.Title 用户ID：@item.UserID 用户昵称：@item.UserName  @(item.Reply == null ? "未回复" : "已回复")</h4>
+                        <ul class="card-actions">
+                            <li>
+                                @Ajax.ActionLink(" ", null, null, new AjaxOptions { Confirm = "确定删除?", Url = Url.Action("DelFeedBack", "PersonRelevant", new { item.FeedBackID,Model.PageIndex }), UpdateTargetId = "FeedBackPageTable", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", data_toggle = "tooltip", title = "删除" })
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <p>反馈内容：@item.Context</p>
+                        <p>回复内容：@(item.Reply==null?"无":item.Reply)</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+

@@ -1,0 +1,1385 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GameClubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="ArticleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Context" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Authority">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="AuthorityString" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="UserManage" Type="bit" />
+          <Property Name="GameMemberManage" Type="bit" />
+          <Property Name="SignManage" Type="bit" />
+          <Property Name="ContributionManage" Type="bit" />
+          <Property Name="MemberGroupManage" Type="bit" />
+          <Property Name="RelevantManage" Type="bit" />
+        </EntityType>
+        <EntityType Name="Contribution">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContributionID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="GameID" Type="int" Nullable="false" />
+          <Property Name="AllContribution" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="MinSpeed" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="ContributionList">
+          <Key>
+            <PropertyRef Name="ContributionID" />
+          </Key>
+          <Property Name="ContributionID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Time" Type="int" />
+          <Property Name="SignID" Type="nvarchar" MaxLength="20" />
+          <Property Name="MemberGroupID" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreateDateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="FeedBackID" />
+          </Key>
+          <Property Name="FeedBackID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Context" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="Reply" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="FillOut">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GameID" Type="int" Nullable="false" />
+          <Property Name="QuestionaryID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="QuestionID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="SelectID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GameAuthority">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="int" Nullable="false" />
+          <Property Name="AuthorityString" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GameMember">
+          <Key>
+            <PropertyRef Name="GameID" />
+          </Key>
+          <Property Name="GameID" Type="int" Nullable="false" />
+          <Property Name="GameName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Authority" Type="int" Nullable="false" />
+          <Property Name="JoinDate" Type="datetime" Nullable="false" />
+          <Property Name="IsDel" Type="bit" />
+          <Property Name="DelTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="InformMessage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Context" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MemberGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MemberGroupID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="GameID" Type="int" Nullable="false" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="MemberGroupList">
+          <Key>
+            <PropertyRef Name="MemberGroupID" />
+          </Key>
+          <Property Name="MemberGroupID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="SignID" Type="nvarchar" MaxLength="20" />
+          <Property Name="ContributionID" Type="nvarchar" MaxLength="20" />
+          <Property Name="CreateDateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="QuestionaryID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="QuestionContext" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Type" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Questionary">
+          <Key>
+            <PropertyRef Name="QuestionaryID" />
+          </Key>
+          <Property Name="QuestionaryID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Context" Type="nvarchar" MaxLength="500" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Select">
+          <Key>
+            <PropertyRef Name="SelectID" />
+          </Key>
+          <Property Name="SelectID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="QuestionID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Type" Type="bit" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SignInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SignID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="GameID" Type="int" Nullable="false" />
+          <Property Name="SignCondition" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="SignDatetime" Type="datetime" />
+          <Property Name="VoiceCondition" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="IsLeave" Type="bit" Nullable="false" />
+          <Property Name="Deal" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="SignList">
+          <Key>
+            <PropertyRef Name="SignID" />
+          </Key>
+          <Property Name="SignID" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="ContributionID" Type="nvarchar" MaxLength="20" />
+          <Property Name="MemberGroupID" Type="nvarchar" MaxLength="20" />
+          <Property Name="StartDateTime" Type="datetime" Nullable="false" />
+          <Property Name="EndDateTime" Type="datetime" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PassWord" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Authority" Type="int" Nullable="false" />
+          <Property Name="ImageData" Type="varbinary(max)" />
+          <Property Name="ImageMimeType" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsDel" Type="bit" />
+          <Property Name="DelTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="UserLoginRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="HostIP" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Area" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="RecordTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserOperateRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="OperateContext" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RecordTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Contribution_ContributionList">
+          <End Role="ContributionList" Type="Self.ContributionList" Multiplicity="1" />
+          <End Role="Contribution" Type="Self.Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContributionList">
+              <PropertyRef Name="ContributionID" />
+            </Principal>
+            <Dependent Role="Contribution">
+              <PropertyRef Name="ContributionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contribution_GameMember">
+          <End Role="GameMember" Type="Self.GameMember" Multiplicity="1" />
+          <End Role="Contribution" Type="Self.Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="Contribution">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContributionList_MemberGroupList">
+          <End Role="MemberGroupList" Type="Self.MemberGroupList" Multiplicity="0..1" />
+          <End Role="ContributionList" Type="Self.ContributionList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberGroupList">
+              <PropertyRef Name="MemberGroupID" />
+            </Principal>
+            <Dependent Role="ContributionList">
+              <PropertyRef Name="MemberGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContributionList_SignList">
+          <End Role="SignList" Type="Self.SignList" Multiplicity="0..1" />
+          <End Role="ContributionList" Type="Self.ContributionList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SignList">
+              <PropertyRef Name="SignID" />
+            </Principal>
+            <Dependent Role="ContributionList">
+              <PropertyRef Name="SignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FillOut_GameMember">
+          <End Role="GameMember" Type="Self.GameMember" Multiplicity="1" />
+          <End Role="FillOut" Type="Self.FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FillOut_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="FillOut" Type="Self.FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FillOut_Questionary">
+          <End Role="Questionary" Type="Self.Questionary" Multiplicity="1" />
+          <End Role="FillOut" Type="Self.FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionary">
+              <PropertyRef Name="QuestionaryID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="QuestionaryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FillOut_Select">
+          <End Role="Select" Type="Self.Select" Multiplicity="1" />
+          <End Role="FillOut" Type="Self.FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Select">
+              <PropertyRef Name="SelectID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="SelectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameMember_GameAuthority">
+          <End Role="GameAuthority" Type="Self.GameAuthority" Multiplicity="1" />
+          <End Role="GameMember" Type="Self.GameMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameAuthority">
+              <PropertyRef Name="Number" />
+            </Principal>
+            <Dependent Role="GameMember">
+              <PropertyRef Name="Authority" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroup_GameMember">
+          <End Role="GameMember" Type="Self.GameMember" Multiplicity="1" />
+          <End Role="MemberGroup" Type="Self.MemberGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="MemberGroup">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroup_MemberGroupList">
+          <End Role="MemberGroupList" Type="Self.MemberGroupList" Multiplicity="1" />
+          <End Role="MemberGroup" Type="Self.MemberGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberGroupList">
+              <PropertyRef Name="MemberGroupID" />
+            </Principal>
+            <Dependent Role="MemberGroup">
+              <PropertyRef Name="MemberGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroupList_ContributionList">
+          <End Role="ContributionList" Type="Self.ContributionList" Multiplicity="0..1" />
+          <End Role="MemberGroupList" Type="Self.MemberGroupList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContributionList">
+              <PropertyRef Name="ContributionID" />
+            </Principal>
+            <Dependent Role="MemberGroupList">
+              <PropertyRef Name="ContributionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroupList_SignList">
+          <End Role="SignList" Type="Self.SignList" Multiplicity="0..1" />
+          <End Role="MemberGroupList" Type="Self.MemberGroupList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SignList">
+              <PropertyRef Name="SignID" />
+            </Principal>
+            <Dependent Role="MemberGroupList">
+              <PropertyRef Name="SignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_Questionary">
+          <End Role="Questionary" Type="Self.Questionary" Multiplicity="1" />
+          <End Role="Question" Type="Self.Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionary">
+              <PropertyRef Name="QuestionaryID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="QuestionaryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Select_Question">
+          <End Role="Question" Type="Self.Question" Multiplicity="1" />
+          <End Role="Select" Type="Self.Select" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Select">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignInfo_GameMember">
+          <End Role="GameMember" Type="Self.GameMember" Multiplicity="1" />
+          <End Role="SignInfo" Type="Self.SignInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="SignInfo">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignInfo_SignList">
+          <End Role="SignList" Type="Self.SignList" Multiplicity="1" />
+          <End Role="SignInfo" Type="Self.SignInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SignList">
+              <PropertyRef Name="SignID" />
+            </Principal>
+            <Dependent Role="SignInfo">
+              <PropertyRef Name="SignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignList_ContributionList">
+          <End Role="ContributionList" Type="Self.ContributionList" Multiplicity="0..1" />
+          <End Role="SignList" Type="Self.SignList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContributionList">
+              <PropertyRef Name="ContributionID" />
+            </Principal>
+            <Dependent Role="SignList">
+              <PropertyRef Name="ContributionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignList_MemberGroupList">
+          <End Role="MemberGroupList" Type="Self.MemberGroupList" Multiplicity="0..1" />
+          <End Role="SignList" Type="Self.SignList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberGroupList">
+              <PropertyRef Name="MemberGroupID" />
+            </Principal>
+            <Dependent Role="SignList">
+              <PropertyRef Name="MemberGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserInfo_Authority">
+          <End Role="Authority" Type="Self.Authority" Multiplicity="1" />
+          <End Role="UserInfo" Type="Self.UserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authority">
+              <PropertyRef Name="Number" />
+            </Principal>
+            <Dependent Role="UserInfo">
+              <PropertyRef Name="Authority" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GameClubModelStoreContainer">
+          <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Authority" EntityType="Self.Authority" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contribution" EntityType="Self.Contribution" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContributionList" EntityType="Self.ContributionList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Feedback" EntityType="Self.Feedback" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FillOut" EntityType="Self.FillOut" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GameAuthority" EntityType="Self.GameAuthority" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GameMember" EntityType="Self.GameMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InformMessage" EntityType="Self.InformMessage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberGroup" EntityType="Self.MemberGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MemberGroupList" EntityType="Self.MemberGroupList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Questionary" EntityType="Self.Questionary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Select" EntityType="Self.Select" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SignInfo" EntityType="Self.SignInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SignList" EntityType="Self.SignList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInfo" EntityType="Self.UserInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLoginRecord" EntityType="Self.UserLoginRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserOperateRecord" EntityType="Self.UserOperateRecord" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Contribution_ContributionList" Association="Self.FK_Contribution_ContributionList">
+            <End Role="ContributionList" EntitySet="ContributionList" />
+            <End Role="Contribution" EntitySet="Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contribution_GameMember" Association="Self.FK_Contribution_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="Contribution" EntitySet="Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContributionList_MemberGroupList" Association="Self.FK_ContributionList_MemberGroupList">
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+            <End Role="ContributionList" EntitySet="ContributionList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContributionList_SignList" Association="Self.FK_ContributionList_SignList">
+            <End Role="SignList" EntitySet="SignList" />
+            <End Role="ContributionList" EntitySet="ContributionList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FillOut_GameMember" Association="Self.FK_FillOut_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FillOut_Question" Association="Self.FK_FillOut_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FillOut_Questionary" Association="Self.FK_FillOut_Questionary">
+            <End Role="Questionary" EntitySet="Questionary" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FillOut_Select" Association="Self.FK_FillOut_Select">
+            <End Role="Select" EntitySet="Select" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameMember_GameAuthority" Association="Self.FK_GameMember_GameAuthority">
+            <End Role="GameAuthority" EntitySet="GameAuthority" />
+            <End Role="GameMember" EntitySet="GameMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroup_GameMember" Association="Self.FK_MemberGroup_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="MemberGroup" EntitySet="MemberGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroup_MemberGroupList" Association="Self.FK_MemberGroup_MemberGroupList">
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+            <End Role="MemberGroup" EntitySet="MemberGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroupList_ContributionList" Association="Self.FK_MemberGroupList_ContributionList">
+            <End Role="ContributionList" EntitySet="ContributionList" />
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroupList_SignList" Association="Self.FK_MemberGroupList_SignList">
+            <End Role="SignList" EntitySet="SignList" />
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_Questionary" Association="Self.FK_Question_Questionary">
+            <End Role="Questionary" EntitySet="Questionary" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Select_Question" Association="Self.FK_Select_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Select" EntitySet="Select" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignInfo_GameMember" Association="Self.FK_SignInfo_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="SignInfo" EntitySet="SignInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignInfo_SignList" Association="Self.FK_SignInfo_SignList">
+            <End Role="SignList" EntitySet="SignList" />
+            <End Role="SignInfo" EntitySet="SignInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignList_ContributionList" Association="Self.FK_SignList_ContributionList">
+            <End Role="ContributionList" EntitySet="ContributionList" />
+            <End Role="SignList" EntitySet="SignList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignList_MemberGroupList" Association="Self.FK_SignList_MemberGroupList">
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+            <End Role="SignList" EntitySet="SignList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserInfo_Authority" Association="Self.FK_UserInfo_Authority">
+            <End Role="Authority" EntitySet="Authority" />
+            <End Role="UserInfo" EntitySet="UserInfo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GameClubModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="GameClubEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Authority" EntityType="GameClubModel.Authority" />
+          <EntitySet Name="Contribution" EntityType="GameClubModel.Contribution" />
+          <EntitySet Name="ContributionList" EntityType="GameClubModel.ContributionList" />
+          <EntitySet Name="GameAuthority" EntityType="GameClubModel.GameAuthority" />
+          <EntitySet Name="GameMember" EntityType="GameClubModel.GameMember" />
+          <EntitySet Name="MemberGroup" EntityType="GameClubModel.MemberGroup" />
+          <EntitySet Name="MemberGroupList" EntityType="GameClubModel.MemberGroupList" />
+          <EntitySet Name="SignInfo" EntityType="GameClubModel.SignInfo" />
+          <EntitySet Name="SignList" EntityType="GameClubModel.SignList" />
+          <EntitySet Name="UserInfo" EntityType="GameClubModel.UserInfo" />
+          <AssociationSet Name="FK_UserInfo_Authority" Association="GameClubModel.FK_UserInfo_Authority">
+            <End Role="Authority" EntitySet="Authority" />
+            <End Role="UserInfo" EntitySet="UserInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contribution_ContributionList" Association="GameClubModel.FK_Contribution_ContributionList">
+            <End Role="ContributionList" EntitySet="ContributionList" />
+            <End Role="Contribution" EntitySet="Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contribution_GameMember" Association="GameClubModel.FK_Contribution_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="Contribution" EntitySet="Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContributionList_MemberGroupList" Association="GameClubModel.FK_ContributionList_MemberGroupList">
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+            <End Role="ContributionList" EntitySet="ContributionList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContributionList_SignList" Association="GameClubModel.FK_ContributionList_SignList">
+            <End Role="SignList" EntitySet="SignList" />
+            <End Role="ContributionList" EntitySet="ContributionList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroupList_ContributionList" Association="GameClubModel.FK_MemberGroupList_ContributionList">
+            <End Role="ContributionList" EntitySet="ContributionList" />
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignList_ContributionList" Association="GameClubModel.FK_SignList_ContributionList">
+            <End Role="ContributionList" EntitySet="ContributionList" />
+            <End Role="SignList" EntitySet="SignList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GameMember_GameAuthority" Association="GameClubModel.FK_GameMember_GameAuthority">
+            <End Role="GameAuthority" EntitySet="GameAuthority" />
+            <End Role="GameMember" EntitySet="GameMember" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroup_GameMember" Association="GameClubModel.FK_MemberGroup_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="MemberGroup" EntitySet="MemberGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignInfo_GameMember" Association="GameClubModel.FK_SignInfo_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="SignInfo" EntitySet="SignInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroup_MemberGroupList" Association="GameClubModel.FK_MemberGroup_MemberGroupList">
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+            <End Role="MemberGroup" EntitySet="MemberGroup" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MemberGroupList_SignList" Association="GameClubModel.FK_MemberGroupList_SignList">
+            <End Role="SignList" EntitySet="SignList" />
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignList_MemberGroupList" Association="GameClubModel.FK_SignList_MemberGroupList">
+            <End Role="MemberGroupList" EntitySet="MemberGroupList" />
+            <End Role="SignList" EntitySet="SignList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SignInfo_SignList" Association="GameClubModel.FK_SignInfo_SignList">
+            <End Role="SignList" EntitySet="SignList" />
+            <End Role="SignInfo" EntitySet="SignInfo" />
+          </AssociationSet>
+          <EntitySet Name="InformMessage" EntityType="GameClubModel.InformMessage" />
+          <EntitySet Name="FillOut" EntityType="GameClubModel.FillOut" />
+          <EntitySet Name="Question" EntityType="GameClubModel.Question" />
+          <EntitySet Name="Questionary" EntityType="GameClubModel.Questionary" />
+          <EntitySet Name="Select" EntityType="GameClubModel.Select" />
+          <AssociationSet Name="FK_FillOut_GameMember" Association="GameClubModel.FK_FillOut_GameMember">
+            <End Role="GameMember" EntitySet="GameMember" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FillOut_Question" Association="GameClubModel.FK_FillOut_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FillOut_Questionary" Association="GameClubModel.FK_FillOut_Questionary">
+            <End Role="Questionary" EntitySet="Questionary" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FillOut_Select" Association="GameClubModel.FK_FillOut_Select">
+            <End Role="Select" EntitySet="Select" />
+            <End Role="FillOut" EntitySet="FillOut" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Question_Questionary" Association="GameClubModel.FK_Question_Questionary">
+            <End Role="Questionary" EntitySet="Questionary" />
+            <End Role="Question" EntitySet="Question" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Select_Question" Association="GameClubModel.FK_Select_Question">
+            <End Role="Question" EntitySet="Question" />
+            <End Role="Select" EntitySet="Select" />
+          </AssociationSet>
+          <EntitySet Name="Article" EntityType="GameClubModel.Article" />
+          <EntitySet Name="Feedback" EntityType="GameClubModel.Feedback" />
+          <EntitySet Name="UserOperateRecord" EntityType="GameClubModel.UserOperateRecord" />
+          <EntitySet Name="UserLoginRecord" EntityType="GameClubModel.UserLoginRecord" />
+        </EntityContainer>
+        <EntityType Name="Authority">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="AuthorityString" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserInfo" Relationship="GameClubModel.FK_UserInfo_Authority" FromRole="Authority" ToRole="UserInfo" />
+          <Property Name="UserManage" Type="Boolean" />
+          <Property Name="GameMemberManage" Type="Boolean" />
+          <Property Name="SignManage" Type="Boolean" />
+          <Property Name="ContributionManage" Type="Boolean" />
+          <Property Name="MemberGroupManage" Type="Boolean" />
+          <Property Name="RelevantManage" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Contribution">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContributionID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GameID" Type="Int32" Nullable="false" />
+          <Property Name="AllContribution" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="MinSpeed" Type="Decimal" Precision="5" Scale="2" />
+          <NavigationProperty Name="ContributionList" Relationship="GameClubModel.FK_Contribution_ContributionList" FromRole="Contribution" ToRole="ContributionList" />
+          <NavigationProperty Name="GameMember" Relationship="GameClubModel.FK_Contribution_GameMember" FromRole="Contribution" ToRole="GameMember" />
+        </EntityType>
+        <EntityType Name="ContributionList">
+          <Key>
+            <PropertyRef Name="ContributionID" />
+          </Key>
+          <Property Name="ContributionID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Time" Type="Int32" />
+          <Property Name="SignID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MemberGroupID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Contribution" Relationship="GameClubModel.FK_Contribution_ContributionList" FromRole="ContributionList" ToRole="Contribution" />
+          <NavigationProperty Name="MemberGroupList" Relationship="GameClubModel.FK_ContributionList_MemberGroupList" FromRole="ContributionList" ToRole="MemberGroupList" />
+          <NavigationProperty Name="SignList" Relationship="GameClubModel.FK_ContributionList_SignList" FromRole="ContributionList" ToRole="SignList" />
+          <NavigationProperty Name="MemberGroupList1" Relationship="GameClubModel.FK_MemberGroupList_ContributionList" FromRole="ContributionList" ToRole="MemberGroupList" />
+          <NavigationProperty Name="SignList1" Relationship="GameClubModel.FK_SignList_ContributionList" FromRole="ContributionList" ToRole="SignList" />
+        </EntityType>
+        <EntityType Name="GameAuthority">
+          <Key>
+            <PropertyRef Name="Number" />
+          </Key>
+          <Property Name="Number" Type="Int32" Nullable="false" />
+          <Property Name="AuthorityString" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GameMember" Relationship="GameClubModel.FK_GameMember_GameAuthority" FromRole="GameAuthority" ToRole="GameMember" />
+        </EntityType>
+        <EntityType Name="GameMember">
+          <Key>
+            <PropertyRef Name="GameID" />
+          </Key>
+          <Property Name="GameID" Type="Int32" Nullable="false" />
+          <Property Name="GameName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Authority" Type="Int32" Nullable="false" />
+          <Property Name="JoinDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Contribution" Relationship="GameClubModel.FK_Contribution_GameMember" FromRole="GameMember" ToRole="Contribution" />
+          <NavigationProperty Name="GameAuthority" Relationship="GameClubModel.FK_GameMember_GameAuthority" FromRole="GameMember" ToRole="GameAuthority" />
+          <NavigationProperty Name="MemberGroup" Relationship="GameClubModel.FK_MemberGroup_GameMember" FromRole="GameMember" ToRole="MemberGroup" />
+          <NavigationProperty Name="SignInfo" Relationship="GameClubModel.FK_SignInfo_GameMember" FromRole="GameMember" ToRole="SignInfo" />
+          <NavigationProperty Name="FillOut" Relationship="GameClubModel.FK_FillOut_GameMember" FromRole="GameMember" ToRole="FillOut" />
+          <Property Name="IsDel" Type="Boolean" />
+          <Property Name="DelTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="MemberGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MemberGroupID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GameID" Type="Int32" Nullable="false" />
+          <Property Name="GroupName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GameMember" Relationship="GameClubModel.FK_MemberGroup_GameMember" FromRole="MemberGroup" ToRole="GameMember" />
+          <NavigationProperty Name="MemberGroupList" Relationship="GameClubModel.FK_MemberGroup_MemberGroupList" FromRole="MemberGroup" ToRole="MemberGroupList" />
+        </EntityType>
+        <EntityType Name="MemberGroupList">
+          <Key>
+            <PropertyRef Name="MemberGroupID" />
+          </Key>
+          <Property Name="MemberGroupID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SignID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ContributionID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ContributionList" Relationship="GameClubModel.FK_ContributionList_MemberGroupList" FromRole="MemberGroupList" ToRole="ContributionList" />
+          <NavigationProperty Name="ContributionList1" Relationship="GameClubModel.FK_MemberGroupList_ContributionList" FromRole="MemberGroupList" ToRole="ContributionList" />
+          <NavigationProperty Name="MemberGroup" Relationship="GameClubModel.FK_MemberGroup_MemberGroupList" FromRole="MemberGroupList" ToRole="MemberGroup" />
+          <NavigationProperty Name="SignList" Relationship="GameClubModel.FK_MemberGroupList_SignList" FromRole="MemberGroupList" ToRole="SignList" />
+          <NavigationProperty Name="SignList1" Relationship="GameClubModel.FK_SignList_MemberGroupList" FromRole="MemberGroupList" ToRole="SignList" />
+        </EntityType>
+        <EntityType Name="SignInfo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SignID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GameID" Type="Int32" Nullable="false" />
+          <Property Name="SignCondition" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SignDatetime" Type="DateTime" Precision="3" />
+          <Property Name="VoiceCondition" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsLeave" Type="Boolean" Nullable="false" />
+          <Property Name="Deal" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GameMember" Relationship="GameClubModel.FK_SignInfo_GameMember" FromRole="SignInfo" ToRole="GameMember" />
+          <NavigationProperty Name="SignList" Relationship="GameClubModel.FK_SignInfo_SignList" FromRole="SignInfo" ToRole="SignList" />
+        </EntityType>
+        <EntityType Name="SignList">
+          <Key>
+            <PropertyRef Name="SignID" />
+          </Key>
+          <Property Name="SignID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="ContributionID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MemberGroupID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="StartDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ContributionList" Relationship="GameClubModel.FK_ContributionList_SignList" FromRole="SignList" ToRole="ContributionList" />
+          <NavigationProperty Name="ContributionList1" Relationship="GameClubModel.FK_SignList_ContributionList" FromRole="SignList" ToRole="ContributionList" />
+          <NavigationProperty Name="MemberGroupList" Relationship="GameClubModel.FK_MemberGroupList_SignList" FromRole="SignList" ToRole="MemberGroupList" />
+          <NavigationProperty Name="MemberGroupList1" Relationship="GameClubModel.FK_SignList_MemberGroupList" FromRole="SignList" ToRole="MemberGroupList" />
+          <NavigationProperty Name="SignInfo" Relationship="GameClubModel.FK_SignInfo_SignList" FromRole="SignList" ToRole="SignInfo" />
+        </EntityType>
+        <EntityType Name="UserInfo">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PassWord" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Authority" Type="Int32" Nullable="false" />
+          <Property Name="ImageData" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ImageMimeType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Authority1" Relationship="GameClubModel.FK_UserInfo_Authority" FromRole="UserInfo" ToRole="Authority" />
+          <Property Name="IsDel" Type="Boolean" />
+          <Property Name="DelTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_UserInfo_Authority">
+          <End Type="GameClubModel.Authority" Role="Authority" Multiplicity="1" />
+          <End Type="GameClubModel.UserInfo" Role="UserInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Authority">
+              <PropertyRef Name="Number" />
+            </Principal>
+            <Dependent Role="UserInfo">
+              <PropertyRef Name="Authority" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contribution_ContributionList">
+          <End Type="GameClubModel.ContributionList" Role="ContributionList" Multiplicity="1" />
+          <End Type="GameClubModel.Contribution" Role="Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContributionList">
+              <PropertyRef Name="ContributionID" />
+            </Principal>
+            <Dependent Role="Contribution">
+              <PropertyRef Name="ContributionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contribution_GameMember">
+          <End Type="GameClubModel.GameMember" Role="GameMember" Multiplicity="1" />
+          <End Type="GameClubModel.Contribution" Role="Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="Contribution">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContributionList_MemberGroupList">
+          <End Type="GameClubModel.MemberGroupList" Role="MemberGroupList" Multiplicity="0..1" />
+          <End Type="GameClubModel.ContributionList" Role="ContributionList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberGroupList">
+              <PropertyRef Name="MemberGroupID" />
+            </Principal>
+            <Dependent Role="ContributionList">
+              <PropertyRef Name="MemberGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContributionList_SignList">
+          <End Type="GameClubModel.SignList" Role="SignList" Multiplicity="0..1" />
+          <End Type="GameClubModel.ContributionList" Role="ContributionList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SignList">
+              <PropertyRef Name="SignID" />
+            </Principal>
+            <Dependent Role="ContributionList">
+              <PropertyRef Name="SignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroupList_ContributionList">
+          <End Type="GameClubModel.ContributionList" Role="ContributionList" Multiplicity="0..1" />
+          <End Type="GameClubModel.MemberGroupList" Role="MemberGroupList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContributionList">
+              <PropertyRef Name="ContributionID" />
+            </Principal>
+            <Dependent Role="MemberGroupList">
+              <PropertyRef Name="ContributionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignList_ContributionList">
+          <End Type="GameClubModel.ContributionList" Role="ContributionList" Multiplicity="0..1" />
+          <End Type="GameClubModel.SignList" Role="SignList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContributionList">
+              <PropertyRef Name="ContributionID" />
+            </Principal>
+            <Dependent Role="SignList">
+              <PropertyRef Name="ContributionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameMember_GameAuthority">
+          <End Type="GameClubModel.GameAuthority" Role="GameAuthority" Multiplicity="1" />
+          <End Type="GameClubModel.GameMember" Role="GameMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameAuthority">
+              <PropertyRef Name="Number" />
+            </Principal>
+            <Dependent Role="GameMember">
+              <PropertyRef Name="Authority" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroup_GameMember">
+          <End Type="GameClubModel.GameMember" Role="GameMember" Multiplicity="1" />
+          <End Type="GameClubModel.MemberGroup" Role="MemberGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="MemberGroup">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignInfo_GameMember">
+          <End Type="GameClubModel.GameMember" Role="GameMember" Multiplicity="1" />
+          <End Type="GameClubModel.SignInfo" Role="SignInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="SignInfo">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroup_MemberGroupList">
+          <End Type="GameClubModel.MemberGroupList" Role="MemberGroupList" Multiplicity="1" />
+          <End Type="GameClubModel.MemberGroup" Role="MemberGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberGroupList">
+              <PropertyRef Name="MemberGroupID" />
+            </Principal>
+            <Dependent Role="MemberGroup">
+              <PropertyRef Name="MemberGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MemberGroupList_SignList">
+          <End Type="GameClubModel.SignList" Role="SignList" Multiplicity="0..1" />
+          <End Type="GameClubModel.MemberGroupList" Role="MemberGroupList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SignList">
+              <PropertyRef Name="SignID" />
+            </Principal>
+            <Dependent Role="MemberGroupList">
+              <PropertyRef Name="SignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignList_MemberGroupList">
+          <End Type="GameClubModel.MemberGroupList" Role="MemberGroupList" Multiplicity="0..1" />
+          <End Type="GameClubModel.SignList" Role="SignList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MemberGroupList">
+              <PropertyRef Name="MemberGroupID" />
+            </Principal>
+            <Dependent Role="SignList">
+              <PropertyRef Name="MemberGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SignInfo_SignList">
+          <End Type="GameClubModel.SignList" Role="SignList" Multiplicity="1" />
+          <End Type="GameClubModel.SignInfo" Role="SignInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SignList">
+              <PropertyRef Name="SignID" />
+            </Principal>
+            <Dependent Role="SignInfo">
+              <PropertyRef Name="SignID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="InformMessage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Context" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="FillOut">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GameID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionaryID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SelectID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GameMember" Relationship="GameClubModel.FK_FillOut_GameMember" FromRole="FillOut" ToRole="GameMember" />
+          <NavigationProperty Name="Question" Relationship="GameClubModel.FK_FillOut_Question" FromRole="FillOut" ToRole="Question" />
+          <NavigationProperty Name="Questionary" Relationship="GameClubModel.FK_FillOut_Questionary" FromRole="FillOut" ToRole="Questionary" />
+          <NavigationProperty Name="Select" Relationship="GameClubModel.FK_FillOut_Select" FromRole="FillOut" ToRole="Select" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="QuestionID" />
+          </Key>
+          <Property Name="QuestionID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionaryID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="FillOut" Relationship="GameClubModel.FK_FillOut_Question" FromRole="Question" ToRole="FillOut" />
+          <NavigationProperty Name="Questionary" Relationship="GameClubModel.FK_Question_Questionary" FromRole="Question" ToRole="Questionary" />
+          <NavigationProperty Name="Select" Relationship="GameClubModel.FK_Select_Question" FromRole="Question" ToRole="Select" />
+          <Property Name="QuestionContext" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Questionary">
+          <Key>
+            <PropertyRef Name="QuestionaryID" />
+          </Key>
+          <Property Name="QuestionaryID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Context" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="FillOut" Relationship="GameClubModel.FK_FillOut_Questionary" FromRole="Questionary" ToRole="FillOut" />
+          <NavigationProperty Name="Question" Relationship="GameClubModel.FK_Question_Questionary" FromRole="Questionary" ToRole="Question" />
+        </EntityType>
+        <EntityType Name="Select">
+          <Key>
+            <PropertyRef Name="SelectID" />
+          </Key>
+          <Property Name="SelectID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="QuestionID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="true" />
+          <NavigationProperty Name="FillOut" Relationship="GameClubModel.FK_FillOut_Select" FromRole="Select" ToRole="FillOut" />
+          <NavigationProperty Name="Question" Relationship="GameClubModel.FK_Select_Question" FromRole="Select" ToRole="Question" />
+          <Property Name="Type" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_FillOut_GameMember">
+          <End Type="GameClubModel.GameMember" Role="GameMember" Multiplicity="1" />
+          <End Type="GameClubModel.FillOut" Role="FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GameMember">
+              <PropertyRef Name="GameID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="GameID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FillOut_Question">
+          <End Type="GameClubModel.Question" Role="Question" Multiplicity="1" />
+          <End Type="GameClubModel.FillOut" Role="FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FillOut_Questionary">
+          <End Type="GameClubModel.Questionary" Role="Questionary" Multiplicity="1" />
+          <End Type="GameClubModel.FillOut" Role="FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionary">
+              <PropertyRef Name="QuestionaryID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="QuestionaryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FillOut_Select">
+          <End Type="GameClubModel.Select" Role="Select" Multiplicity="1" />
+          <End Type="GameClubModel.FillOut" Role="FillOut" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Select">
+              <PropertyRef Name="SelectID" />
+            </Principal>
+            <Dependent Role="FillOut">
+              <PropertyRef Name="SelectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Question_Questionary">
+          <End Type="GameClubModel.Questionary" Role="Questionary" Multiplicity="1" />
+          <End Type="GameClubModel.Question" Role="Question" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionary">
+              <PropertyRef Name="QuestionaryID" />
+            </Principal>
+            <Dependent Role="Question">
+              <PropertyRef Name="QuestionaryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Select_Question">
+          <End Type="GameClubModel.Question" Role="Question" Multiplicity="1" />
+          <End Type="GameClubModel.Select" Role="Select" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Question">
+              <PropertyRef Name="QuestionID" />
+            </Principal>
+            <Dependent Role="Select">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="ArticleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Context" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Feedback">
+          <Key>
+            <PropertyRef Name="FeedBackID" />
+          </Key>
+          <Property Name="FeedBackID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Context" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Reply" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserOperateRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OperateContext" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecordTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="UserLoginRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HostIP" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Area" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GameClubModelStoreContainer" CdmEntityContainer="GameClubEntities">
+          <EntitySetMapping Name="Authority">
+            <EntityTypeMapping TypeName="GameClubModel.Authority">
+              <MappingFragment StoreEntitySet="Authority">
+                <ScalarProperty Name="RelevantManage" ColumnName="RelevantManage" />
+                <ScalarProperty Name="MemberGroupManage" ColumnName="MemberGroupManage" />
+                <ScalarProperty Name="ContributionManage" ColumnName="ContributionManage" />
+                <ScalarProperty Name="SignManage" ColumnName="SignManage" />
+                <ScalarProperty Name="GameMemberManage" ColumnName="GameMemberManage" />
+                <ScalarProperty Name="UserManage" ColumnName="UserManage" />
+                <ScalarProperty Name="AuthorityString" ColumnName="AuthorityString" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contribution">
+            <EntityTypeMapping TypeName="GameClubModel.Contribution">
+              <MappingFragment StoreEntitySet="Contribution">
+                <ScalarProperty Name="MinSpeed" ColumnName="MinSpeed" />
+                <ScalarProperty Name="AllContribution" ColumnName="AllContribution" />
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="ContributionID" ColumnName="ContributionID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContributionList">
+            <EntityTypeMapping TypeName="GameClubModel.ContributionList">
+              <MappingFragment StoreEntitySet="ContributionList">
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="MemberGroupID" ColumnName="MemberGroupID" />
+                <ScalarProperty Name="SignID" ColumnName="SignID" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ContributionID" ColumnName="ContributionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GameAuthority">
+            <EntityTypeMapping TypeName="GameClubModel.GameAuthority">
+              <MappingFragment StoreEntitySet="GameAuthority">
+                <ScalarProperty Name="AuthorityString" ColumnName="AuthorityString" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GameMember">
+            <EntityTypeMapping TypeName="GameClubModel.GameMember">
+              <MappingFragment StoreEntitySet="GameMember">
+                <ScalarProperty Name="DelTime" ColumnName="DelTime" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="JoinDate" ColumnName="JoinDate" />
+                <ScalarProperty Name="Authority" ColumnName="Authority" />
+                <ScalarProperty Name="GameName" ColumnName="GameName" />
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberGroup">
+            <EntityTypeMapping TypeName="GameClubModel.MemberGroup">
+              <MappingFragment StoreEntitySet="MemberGroup">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="MemberGroupID" ColumnName="MemberGroupID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MemberGroupList">
+            <EntityTypeMapping TypeName="GameClubModel.MemberGroupList">
+              <MappingFragment StoreEntitySet="MemberGroupList">
+                <ScalarProperty Name="CreateDateTime" ColumnName="CreateDateTime" />
+                <ScalarProperty Name="ContributionID" ColumnName="ContributionID" />
+                <ScalarProperty Name="SignID" ColumnName="SignID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="MemberGroupID" ColumnName="MemberGroupID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SignInfo">
+            <EntityTypeMapping TypeName="GameClubModel.SignInfo">
+              <MappingFragment StoreEntitySet="SignInfo">
+                <ScalarProperty Name="Deal" ColumnName="Deal" />
+                <ScalarProperty Name="IsLeave" ColumnName="IsLeave" />
+                <ScalarProperty Name="VoiceCondition" ColumnName="VoiceCondition" />
+                <ScalarProperty Name="SignDatetime" ColumnName="SignDatetime" />
+                <ScalarProperty Name="SignCondition" ColumnName="SignCondition" />
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="SignID" ColumnName="SignID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SignList">
+            <EntityTypeMapping TypeName="GameClubModel.SignList">
+              <MappingFragment StoreEntitySet="SignList">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="EndDateTime" ColumnName="EndDateTime" />
+                <ScalarProperty Name="StartDateTime" ColumnName="StartDateTime" />
+                <ScalarProperty Name="MemberGroupID" ColumnName="MemberGroupID" />
+                <ScalarProperty Name="ContributionID" ColumnName="ContributionID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="SignID" ColumnName="SignID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInfo">
+            <EntityTypeMapping TypeName="GameClubModel.UserInfo">
+              <MappingFragment StoreEntitySet="UserInfo">
+                <ScalarProperty Name="DelTime" ColumnName="DelTime" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="ImageMimeType" ColumnName="ImageMimeType" />
+                <ScalarProperty Name="ImageData" ColumnName="ImageData" />
+                <ScalarProperty Name="Authority" ColumnName="Authority" />
+                <ScalarProperty Name="PassWord" ColumnName="PassWord" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InformMessage">
+            <EntityTypeMapping TypeName="GameClubModel.InformMessage">
+              <MappingFragment StoreEntitySet="InformMessage">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Context" ColumnName="Context" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FillOut">
+            <EntityTypeMapping TypeName="GameClubModel.FillOut">
+              <MappingFragment StoreEntitySet="FillOut">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="SelectID" ColumnName="SelectID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuestionaryID" ColumnName="QuestionaryID" />
+                <ScalarProperty Name="GameID" ColumnName="GameID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Question">
+            <EntityTypeMapping TypeName="GameClubModel.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="QuestionContext" ColumnName="QuestionContext" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="QuestionaryID" ColumnName="QuestionaryID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Questionary">
+            <EntityTypeMapping TypeName="GameClubModel.Questionary">
+              <MappingFragment StoreEntitySet="Questionary">
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Context" ColumnName="Context" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="QuestionaryID" ColumnName="QuestionaryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Select">
+            <EntityTypeMapping TypeName="GameClubModel.Select">
+              <MappingFragment StoreEntitySet="Select">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="SelectID" ColumnName="SelectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Article">
+            <EntityTypeMapping TypeName="GameClubModel.Article">
+              <MappingFragment StoreEntitySet="Article">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Context" ColumnName="Context" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Feedback">
+            <EntityTypeMapping TypeName="GameClubModel.Feedback">
+              <MappingFragment StoreEntitySet="Feedback">
+                <ScalarProperty Name="Reply" ColumnName="Reply" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Context" ColumnName="Context" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FeedBackID" ColumnName="FeedBackID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserOperateRecord">
+            <EntityTypeMapping TypeName="GameClubModel.UserOperateRecord">
+              <MappingFragment StoreEntitySet="UserOperateRecord">
+                <ScalarProperty Name="RecordTime" ColumnName="RecordTime" />
+                <ScalarProperty Name="OperateContext" ColumnName="OperateContext" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLoginRecord">
+            <EntityTypeMapping TypeName="GameClubModel.UserLoginRecord">
+              <MappingFragment StoreEntitySet="UserLoginRecord">
+                <ScalarProperty Name="RecordTime" ColumnName="RecordTime" />
+                <ScalarProperty Name="Area" ColumnName="Area" />
+                <ScalarProperty Name="HostIP" ColumnName="HostIP" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

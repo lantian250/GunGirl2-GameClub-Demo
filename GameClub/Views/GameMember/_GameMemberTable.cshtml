@@ -1,0 +1,52 @@
+﻿@model GameClub.ViewModels.GameMemberViewModel
+@{ 
+    int count = 0;
+}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" id="check-all"><span></span>
+                </label>
+            </th>
+            <th>编号</th>
+            <th>@Html.DisplayName("游戏ID")@Html.ActionLink(" ", "GameMemberManage", "GameMember",  new { sortBy = "GameID", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.keyword,IsOrderBy=true}, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayName("游戏昵称")@Html.ActionLink(" ", "GameMemberManage", "GameMember", new { sortBy = "GameName", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.keyword, IsOrderBy = true }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayName("社团职位")@Html.ActionLink(" ", "GameMemberManage", "GameMember", new { sortBy = "Authority", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.keyword, IsOrderBy = true }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayName("加入时间")@Html.ActionLink(" ", "GameMemberManage", "GameMember", new { sortBy = "JoinDate", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.keyword, IsOrderBy = true }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GameMembersPagedList)
+        {
+        <tr>
+            <td>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" name="listid" value="@item.GameID"><span></span>
+                </label>
+            </td>
+            <td>@(Model.GameMembersPagedList.StartItemIndex + count++)</td>
+            <td><a href="@Url.Action("ShowGameMember","PersonActivity",new { item.GameID})" target="_blank">@item.GameID</a></td>
+            <td>@item.GameName</td>
+            @if (Model.getAuthorityString(item.Authority) != null)
+            {
+                <td>@Model.getAuthorityString(item.Authority)</td>
+            }
+            else
+            {
+                <td>@item.Authority</td>
+            }
+            <td>@item.JoinDate.ToString("yyyy年MM月dd日")</td>
+            <td>
+                <div class="btn-group">
+                    <a class="btn btn-xs btn-default" href="@Url.Action("Edit",new { GameID=item.GameID,pageid=Model.PageID,pagesize=Model.PageSize,keyword=Model.keyword,IsOrderBy=false})" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+                    <a class="btn btn-xs btn-default" href="@Url.Action("Del",new { GameID=item.GameID,pageid=Model.PageID,pagesize=Model.PageSize,keyword=Model.keyword,IsOrderBy=false})" onclick="return confirm('确定是否删除?');" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+
+</table>

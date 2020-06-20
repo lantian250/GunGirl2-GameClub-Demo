@@ -1,0 +1,144 @@
+﻿@model GameClub.ViewModels.AllUserInfoViewModel
+@{
+    ViewBag.Title = "用户管理";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+@section main{
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    @*@using (Html.BeginForm("DeleteList", "User", FormMethod.Post))
+                        {*@
+                    <div class="card-toolbar clearfix">
+                        <div class="pull-right search-bar">
+                            @*@Html.Partial("Search",Model)*@
+                            @using (Html.BeginForm("Index", "User"))
+                            {
+                                @Html.Hidden("id", Model.PageID)
+                                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="留空搜索展示所有内容">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-secondary" id="search-btn" type="submit" accesskey="on"><i class="mdi mdi-search-web"></i> 搜索</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @{ Html.BeginForm("DeleteList", "User", FormMethod.Post);}
+                        <div class="toolbar-btn-action">
+                            <button type="button" class="btn btn-primary m-r-5" onclick="AddModel()"><i class="mdi mdi-plus"></i> 新增</button>
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('确定是否删除选中项?');"><i class="mdi mdi-window-close"></i> 删除选中项</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    单页显示数量:@(ViewBag.PageSize)条 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("Index","User",new { pageid=Model.PageID,pagesize=20,keyword=Model.keyword,Model.SortBy,Model.CurrentSort})">20条</a></li>
+                                    <li><a href="@Url.Action("Index","User",new { pageid=Model.PageID,pagesize=30,keyword=Model.keyword,Model.SortBy,Model.CurrentSort})">30条</a></li>
+                                    <li><a href="@Url.Action("Index","User",new { pageid=Model.PageID,pagesize=50,keyword=Model.keyword,Model.SortBy,Model.CurrentSort})">50条</a></li>
+                                    <li><a href="@Url.Action("Index","User",new { pageid=Model.PageID,pagesize=100,keyword=Model.keyword,Model.SortBy,Model.CurrentSort})">100条</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="lyear-checkbox checkbox-primary">
+                                                <input type="checkbox" id="check-all"><span></span>
+                                            </label>
+                                        </th>
+                                        <th>编号</th>
+                                        <th>用户ID @Html.ActionLink(" ", "IndexOrder", "User", new { sortBy = "UserID", currentSort = Model.CurrentSort, id = Model.PageID, pagesize = Model.PageSize, Model.keyword }, new { id = "Sort", @class = "pull-right" })</th>
+                                        <th>用户昵称 @Html.ActionLink(" ", "IndexOrder", "User", new { sortBy = "UserName", currentSort = Model.CurrentSort, id = Model.PageID, pagesize = Model.PageSize, Model.keyword }, new { id = "Sort", @class = "pull-right" })</th>
+                                        <th>权限职能 @Html.ActionLink(" ", "IndexOrder", "User", new { sortBy = "Authority", currentSort = Model.CurrentSort, id = Model.PageID, pagesize = Model.PageSize, Model.keyword }, new { id = "Sort", @class = "pull-right" })</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @Html.Hidden("id", Model.PageID)
+                                    @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                                    @Html.Hidden("keyword", Model.keyword)
+                                    @Html.Hidden("Pagesize", Model.PageSize)
+                                    @foreach (var item in Model.UserInfosPageList)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <label class="lyear-checkbox checkbox-primary">
+                                                    <input type="checkbox" name="listid" value="@item.UserID"><span></span>
+                                                </label>
+                                            </td>
+                                            <td>@(Model.UserInfosPageList.StartItemIndex + count++)</td>
+                                            <td>@item.UserID</td>
+                                            <td>@item.UserName</td>
+                                            @if (Model.Authority(item.Authority) != null)
+                                            {
+                                                <td>@Model.Authority(item.Authority)</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.Authority</td>
+                                            }
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a class="btn btn-xs btn-default" href="@Url.Action("Edit",new { UserID=item.UserID,id=Model.PageID,returnUrl = Request.Url.PathAndQuery,keyword=Model.keyword,PageSize=Model.PageSize,Model.CurrentSort,Model.SortBy})" title="编辑" data-toggle="tooltip"><i class="mdi mdi-pencil"></i></a>
+                                                    <a class="btn btn-xs btn-default" href="@Url.Action("Delete",new { UserID=item.UserID,id=Model.PageID,returnUrl = Request.Url.PathAndQuery,keyword=Model.keyword,PageSize=Model.PageSize,Model.CurrentSort,Model.SortBy})" onclick="return confirm('确定是否删除?');" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>
+                                                    <a class="btn btn-xs btn-default" href="@Url.Action("Reset",new { UserID=item.UserID,id=Model.PageID,returnUrl = Request.Url.PathAndQuery,keyword=Model.keyword,PageSize=Model.PageSize,Model.CurrentSort,Model.SortBy})" onclick="return confirm('确定是否重置密码?');" title="重置密码" data-toggle="tooltip"><i class="mdi mdi-lock-reset"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center">
+                            @Html.Pager(Model.UserInfosPageList, new PagerOptions { AutoHide = false, PageIndexParameterName = "id", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>", Id = "bootstrappager" })
+                        </div>
+                    </div>
+                    @{ Html.EndForm();}
+                    @*}*@
+                </div>
+            </div>
+            @Html.Partial("Add", Model)
+            @Html.Partial("Edit", Model)
+            @Html.Partial("AddGM", Model)
+        </div>
+    </div>
+}
+@section script{
+    <script type="text/javascript">
+        function AddModel() {
+            $('#AddModal').modal("show");
+        }
+        function EditModel() {
+            $('#EditModal').modal("show");
+        }
+        function AddGMModel() {
+            $('#AddModal').modal("hide");
+            $('#AddGMModal').modal("show");
+        }
+        $(document).ready(
+            function DealLink() {
+                $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            }
+        );
+    </script>
+    @if (ViewBag.EditModal != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(function EditModel() {
+                $('#EditModal').modal("show");
+            })
+        </script>
+    }
+}

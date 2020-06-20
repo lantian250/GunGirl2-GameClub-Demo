@@ -1,0 +1,83 @@
+﻿@model GameClub.ViewModels.ContributionListViewModel
+    @{ Html.RenderPartial("_ContributionListPageTable", Model);}
+<div class="text-center">
+    @Ajax.Pager(Model.ContributionListsPageLists, new PagerOptions { AutoHide = false, PageIndexParameterName = "PageIndex", ContainerTagName = "ul", CssClass = "pagination", CurrentPagerItemTemplate = "<li class=\"active\"><a href=\"#\">{0}</a></li>", DisabledPagerItemTemplate = "<li class=\"disabled\"><a>{0}</a></li>", PagerItemTemplate = "<li>{0}</li>" }).AjaxOptions(a => a.SetUpdateTargetId("ContributionInfoPageTable").SetDataFormId("SearchForm"))
+</div>
+<script type="text/javascript">
+        function OnBegin() {
+            lightyear.loading('show');
+        }
+    function OnDelSuccess() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除贡献表成功!', 'success', 3000);
+            }, 1e3)
+        }
+    function OnDelFailure() {
+            $('#SearchForm').submit();
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('删除贡献表失败!', 'danger', 3000);
+            }, 1e3)
+    }
+    function DealInput() {
+            $("[id=pageIndexInput]").each(function () { $(this).val("@Model.PageIndex") })
+            $("[id=CurrentSortInput]").each(function () { $(this).val("@Model.CurrentSort") })
+            $("[id=SortByInput]").each(function () { $(this).val("@Model.SortBy") })
+            $('#SearchForm').submit();
+        }
+    $(document).ready(
+        function DealLink() {
+            $("[id=EditLink]").each(function () { $(this).html("<i class='mdi mdi-pencil'></i>") })
+            $("[id=DelLink]").each(function () { $(this).html("<i class='mdi mdi-window-close'></i>") })
+            $("[id=Sort]").each(function () { $(this).html("<i class='mdi mdi-sort'></i>") })
+            $("[id=pageIndexInput]").each(function () { $(this).val("@Model.PageIndex") })
+        }
+    );
+    function OnAddContributionListSuccess() {
+        @if (!string.IsNullOrEmpty(ViewBag.Fault))
+        {
+            <text>
+            OnFault();
+            </text>
+        }
+        else
+        {
+            <text>
+        $('#AddContributionListModal').modal('hide');
+        OnSuccess();
+            </text>
+        }
+        
+    }
+    function OnAddContributionListFault() {
+        lightyear.loading('show');
+        setTimeout(function () {
+            lightyear.loading('hide');
+            lightyear.notify('信息有误,请核对!', 'danger', 3000);
+        }, 1e3);
+
+    }
+
+    function OnSuccess() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Success', 'success', 3000);
+            }, 1e3);
+    }
+    function OnFault() {
+        $('#SearchForm').submit();
+        lightyear.loading('show');
+            setTimeout(function () {
+                lightyear.loading('hide');
+                lightyear.notify('@ViewBag.Fault', 'danger', 3000);
+            }, 1e3);
+    }
+
+</script>
+
+
+

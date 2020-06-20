@@ -1,0 +1,20 @@
+﻿@model GameClub.ViewModels.ContributionViewModel
+    @foreach (var item in Model.Contributions)
+    {
+        if (item.AllContribution == null)
+        {
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <h4>@item.GameID @Model.GetGameName(item.GameID)</h4>
+                    </div>
+                    <div class="card-body ">
+                        @Html.Hidden("GameID", item.GameID)
+                        <label for="AllContribution.@item.GameID " class="control-label">总贡献：</label>
+                        <input type="text" class="form-control" id="AllContribution" name="AllContribution" value="" />
+                    </div>
+                </div>
+            </div>
+        }
+    }
+

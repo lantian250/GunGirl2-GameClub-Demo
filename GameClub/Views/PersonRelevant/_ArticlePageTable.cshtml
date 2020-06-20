@@ -1,0 +1,14 @@
+﻿@using GameClub.Models
+@model PagedList<Article>
+@if (Model.Count() > 0)
+{
+    <ul class="list-group">
+        @foreach (var item in Model)
+        {
+            <li class="list-group-item row">
+                <a class="" href="@Url.Action("ShowArticle","PersonRelevant",new { item.ArticleID})" target="_blank">标题：@item.Title</a>
+                <a class="pull-right" href="@Url.Action("ShowArticle","PersonRelevant",new { item.ArticleID})" target="_blank">发布于：@item.CreateTime.ToString("yyyy年MM月dd日 HH:mm")</a>
+            </li>
+        }
+    </ul>
+}

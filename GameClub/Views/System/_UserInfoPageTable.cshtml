@@ -1,0 +1,34 @@
+﻿@using GameClub.Models;
+@model PagedList<UserInfo>
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.UserID)</th>
+            <th>@Html.DisplayNameFor(m => m.UserName)</th>
+            <th>@Html.DisplayNameFor(m => m.DelTime)</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(Model.StartItemIndex + count++)</td>
+                <td>@item.UserID</td>
+                <td>@item.UserName</td>
+                <td>@item.DelTime</td>
+                <td>
+                    @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("DelUser", new { item.UserID, PageIndex = ViewBag.PageIndex }), UpdateTargetId = "UserDelPageTable", Confirm = "确定是否删除！", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", type = "button", @class = "btn btn-xs btn-default", title = "删除"})
+                    @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("ResetUser", new { item.UserID, PageIndex = ViewBag.PageIndex }), UpdateTargetId = "UserDelPageTable", Confirm = "确定是否恢复！", OnBegin = "OnBegin", OnSuccess = "OnResetSuccess", OnFailure = "OnResetFailure" }, new { id = "ResetLink", type = "button", @class = "btn btn-xs btn-default", title = "恢复"})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

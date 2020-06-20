@@ -1,0 +1,279 @@
+﻿@using GameClub.Models
+@{
+    int Number = Convert.ToInt32(Session["Authority"].ToString());
+    int UserID = Convert.ToInt32(Session["UserID"].ToString());
+    GameClubEntities gameClubEntities = new GameClubEntities();
+    Authority authority = gameClubEntities.Authority.Where(a => a.Number == Number).FirstOrDefault();
+    GameMember gameMember = gameClubEntities.GameMember.Where(g => g.GameID == UserID).FirstOrDefault();
+}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>首页 - Dreamer后台管理系统</title>
+    <link rel="icon" href="~/Content/images/ico-min.jpg" type="image/ico">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/materialdesignicons.min.css" rel="stylesheet">
+    <link href="~/Content/animate.css" rel="stylesheet" />
+    <link href="~/Scripts/jconfirm/jquery-confirm.min.css" />
+    <link href="~/Content/style.min.css" rel="stylesheet">
+    <link href="~/Content/ErrorStyles.css" rel="stylesheet" />
+    <!--时间选择插件-->
+    <link rel="stylesheet" href="~/Scripts/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css">
+    <!--日期选择插件-->
+    <link rel="stylesheet" href="~/Scripts/bootstrap-datepicker/bootstrap-datepicker3.min.css">
+    <style type="text/css">
+        .modal {
+            /*top: 10%;*/
+            /*position: absolute;
+            margin-top:-100px;*/
+        }
+    </style>
+</head>
+
+<body>
+    <div class="lyear-layout-web">
+        <div class="lyear-layout-container">
+            <!--左侧导航-->
+            <aside class="lyear-layout-sidebar">
+                <!-- logo -->
+                <div id="logo" class="sidebar-header">
+                    <a href="/admin/index"><img src="~/Content/images/logo-sidebar.png" title="LightYear" alt="LightYear" /></a>
+                </div>
+                <div class="lyear-layout-sidebar-scroll">
+
+                    <nav class="sidebar-main">
+                        <ul class="nav nav-drawer">
+                            <li class="nav-item @ViewBag.Index"> <a href="@Url.Action("Index", "Admin",new { IsRead=true})"><i class="mdi mdi-home"></i> 后台首页</a> </li>
+                            <li class="nav-item nav-item-has-subnav @ViewBag.UserInfo">
+                                <a href="javascript:void(0)"><i class="mdi mdi-account-card-details"></i>个人信息</a>
+                                <ul class="nav nav-subnav">
+                                    <li class="@ViewBag.MyUserInfo"> <a href="@Url.Action("MyUserInfo", "Admin")">个人信息查看</a> </li>
+                                    <li class="@ViewBag.ChangePassword"> <a href="@Url.Action("ChangePassword", "Admin")">修改密码</a> </li>
+                                    <li class="@ViewBag.MyUserLoginRecord"> <a href="@Url.Action("UserLoginRecord", "Admin")">登录历史记录</a> </li>
+                                    <li class="@ViewBag.MyUserOperateRecord"> <a href="@Url.Action("UserOperateRecord", "Admin")">操作历史记录</a> </li>
+                                </ul>
+                            </li>
+                            @if (gameMember != null&&gameMember.IsDel!=true)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.PersonActivity ">
+                                    <a href="javasript:void(0)"><i class="mdi mdi-account"></i>社团个人活动管理</a>
+                                    <ul class="nav nav-subnav">
+
+                                        <li class="@ViewBag.DoSign"><a href="@Url.Action("DoSign","PersonActivity")">进行签到</a></li>
+                                        <li class="@ViewBag.SignRecord"><a href="@Url.Action("SignRecord","PersonActivity")">签到历史记录</a></li>
+                                        <li class="@ViewBag.ContributionRecord"><a href="@Url.Action("ContributionRecord","PersonActivity")">贡献历史记录</a></li>
+                                        <li class="@ViewBag.MemberGroupRecord"><a href="@Url.Action("MemberGroupRecord","PersonActivity")">分组历史记录</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item nav-item-has-subnav @ViewBag.PersonRelevant ">
+                                    <a href="javasript:void(0)"><i class="mdi mdi-account"></i>社团个人相关管理</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.FeedBack"><a href="@Url.Action("FeedBack","PersonRelevant")">留言反馈管理</a></li>
+                                        <li class="@ViewBag.Questionary"><a href="@Url.Action("Questionary","PersonRelevant")">问卷调查</a></li>
+                                        <li class="@ViewBag.Article"><a href="@Url.Action("Article","PersonRelevant")">查看社团攻略</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (authority.UserManage == true)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.AllUserInfo">
+                                    <a href="javascript:void(0)"><i class="mdi mdi-account-settings-variant"></i>用户信息</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.AllUserInfoManage"> <a href="@Url.Action("Index", "User")">用户管理</a> </li>
+                                        <li class="@ViewBag.UserAuthority"><a href="@Url.Action("Authority","User")">权限管理</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (authority.GameMemberManage == true)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.GameMember">
+                                    <a href="javascript:void(0)"><i class="mdi mdi-account-box"></i>社团团员</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.GameNumberManage"> <a href="@Url.Action("GameMemberManage", "GameMember")">社团团员管理</a> </li>
+                                        <li class="@ViewBag.GameNumberAuthority"> <a href="@Url.Action("Authority", "GameMember")">社团团员职位管理</a> </li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (authority.SignManage == true)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.Sign">
+                                    <a href="javasript:void(0)"><i class="mdi mdi-alarm-check"></i>社团签到</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.SignList"><a href="@Url.Action("SignListManage","Sign")">社团签到表管理</a></li>
+                                        <li class="@ViewBag.SignInfo"><a href="@Url.Action("SignInfoManage","Sign")">社团签到表信息管理</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (authority.ContributionManage == true)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.Contribution ">
+                                    <a href="javasript:void(0)"><i class="mdi mdi-account-edit"></i>社团贡献</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.ContributionList"><a href="@Url.Action("ContributionListManage","Contribution")">社团贡献表管理</a></li>
+                                        <li class="@ViewBag.ContributionInfo"><a href="@Url.Action("ContributionManage","Contribution")">社团贡献表信息管理</a></li>
+                                        <li class="@ViewBag.DealContributionManage"><a href="@Url.Action("DealContributionManage","Contribution")">批量填写贡献表信息</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (authority.MemberGroupManage == true)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.MemberGroup ">
+                                    <a href="javasript:void(0)"><i class="mdi mdi-account-multiple"></i>社团分组</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.MemberGroupList"><a href="@Url.Action("MemberGroupListManage","MemberGroup")">社团分组表管理</a></li>
+                                        <li class="@ViewBag.MemberGroupInfo"><a href="@Url.Action("MemberGroupManage","MemberGroup")">社团分组表信息管理</a></li>
+                                        <li class="@ViewBag.DealMemberGroupManage"><a href="@Url.Action("DealMemberGroupManage","MemberGroup")">批量分组</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (authority.RelevantManage == true)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.Relevant ">
+                                    <a href="javasript:void(0)"><i class="mdi mdi-account-convert"></i>社团相关</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.InformMessage"><a href="@Url.Action("InformMessage","Relevant")">社团公告管理</a></li>
+                                        <li class="@ViewBag.FeedBackManage"><a href="@Url.Action("FeedBackManage","Relevant")">留言反馈管理</a></li>
+                                        <li class="@ViewBag.QuestionaryManage"><a href="@Url.Action("QuestionaryManage","Relevant")">社团调查问卷管理</a></li>
+                                        <li class="@ViewBag.ArticleManage"><a href="@Url.Action("ArticleManage","Relevant")">游戏攻略相关管理</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            @if (Number == 1)
+                            {
+                                <li class="nav-item nav-item-has-subnav @ViewBag.System">
+                                    <a href="javascript:void(0)"><i class="mdi mdi-settings-box"></i>系统信息管理</a>
+                                    <ul class="nav nav-subnav">
+                                        <li class="@ViewBag.UserLoginRecord"> <a href="@Url.Action("UserLoginRecord", "System")">用户登录历史记录</a> </li>
+                                        <li class="@ViewBag.UserOperateRecord"><a href="@Url.Action("UserOperateRecord","System")">用户操作历史记录</a></li>
+                                        <li class="nav-item nav-item-has-subnav @ViewBag.Recover">
+                                            <a href="javascript:void(0)">回收站</a>
+                                            <ul class="nav nav-subnav">
+                                                <li class="@ViewBag.UserDel"><a href="@Url.Action("UserDel", "System")">已删除的用户</a></li>
+                                                <li class="@ViewBag.GameMemberDel"><a href="@Url.Action("GameMemberDel", "System")">已删除的社团团员</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            <li class="nav-item nav-item-has-subnav ">
+                                <a href="javasript:void(0)"><i class="mdi mdi-account-convert"></i>游戏相关链接</a>
+                                <ul class="nav nav-subnav">
+                                    <li><a href="https://hsod2.hongshn.xyz/">搞事学园</a></li>
+                                    <li><a href="https://user.mihoyo.com/#/login/captcha">米哈游通行证</a></li>
+                                    <li><a href="https://www.benghuai.com/">崩坏学园2官网</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="sidebar-footer">
+                        <p class="copyright">Copyright &copy; 2020. 蓝天 All rights reserved. </p>
+                    </div>
+                </div>
+
+            </aside>
+            <!--End 左侧导航-->
+            <!--头部信息-->
+            <header class="lyear-layout-header">
+
+                <nav class="navbar navbar-default">
+                    <div class="topbar">
+
+                        <div class="topbar-left">
+                            <div class="lyear-aside-toggler">
+                                <span class="lyear-toggler-bar"></span>
+                                <span class="lyear-toggler-bar"></span>
+                                <span class="lyear-toggler-bar"></span>
+                            </div>
+                            <span class="navbar-page-title"> @ViewBag.Title </span>
+                        </div>
+
+                        <ul class="topbar-right">
+                            <li class="dropdown dropdown-profile">
+                                <a href="javascript:void(0)" data-toggle="dropdown">
+                                    <img class="img-avatar img-avatar-48 m-r-10" src="@Url.Action("GetImage", "Admin")" alt="@Session["UserName"]" />
+                                    <span>@Session["UserName"]<span class="caret"></span></span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li> <a href="@Url.Action("MyUserInfo", "Admin")"><i class="mdi mdi-account"></i> 个人信息</a> </li>
+                                    <li> <a href="@Url.Action("ChangePassword", "Admin")"><i class="mdi mdi-lock-outline"></i> 修改密码</a></li>
+                                    <li class="divider"></li>
+                                    <li> <a href="@Url.Action("Logout", "Account")"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    </div>
+                </nav>
+
+            </header>
+            <!--End 头部信息-->
+            <!--页面主要内容-->
+            <main class="lyear-layout-content">
+                @RenderSection("main")
+            </main>
+            <!--End 页面主要内容-->
+        </div>
+    </div>
+
+    <script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/perfect-scrollbar.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/bootstrap-notify.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/lightyear.js"></script>
+    <script type="text/javascript" src="~/Scripts/jconfirm/jquery-confirm.min.js"></script>
+    <!--时间选择插件-->
+    <script src="~/Scripts/bootstrap-datetimepicker/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker/locale/zh-cn.js"></script>
+    <!--日期选择插件-->
+    <script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/main.min.js"></script>
+    <!--MVC AJAX-->
+    <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <!--MVC 客户端验证-->
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    @if (TempData["Success"] != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(
+                function showSuccess() {
+                    lightyear.loading('show');
+                    setTimeout(function () {
+                        lightyear.loading('hide');
+                        lightyear.notify('@TempData["Success"]', 'success', 3000);
+                    }, 1e3)
+                }
+            );
+        </script>
+    }
+    @if (TempData["Fault"] != null)
+    {
+        <script type="text/javascript">
+            $(document).ready(
+            function showFault() {
+                    lightyear.loading('show');
+                    setTimeout(function () {
+                        lightyear.loading('hide');
+                        lightyear.notify('@TempData["Fault"]', 'danger', 3000);
+                    }, 1e3);
+                    $('#@TempData["Modal"]').modal('show');
+                }
+            );
+            $(function () {
+
+                $('input:not([autocomplete]),textarea:not([autocomplete]),select:not([autocomplete])').attr('autocomplete', 'off');
+
+            }); 
+        </script>
+    }
+
+
+    @RenderSection("script")
+
+</body>
+</html>

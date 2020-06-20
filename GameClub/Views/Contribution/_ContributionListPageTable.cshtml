@@ -1,0 +1,58 @@
+﻿@model GameClub.ViewModels.ContributionListViewModel
+
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" id="check-all"><span></span>
+                </label>
+            </th>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.ContributionList.ContributionID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionListPageTable", Url = Url.Action("ContributionListManage", "Contribution", new { sortBy = "ContributionID", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.ContributionList.Type)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionListPageTable", Url = Url.Action("ContributionListManage", "Contribution", new { sortBy = "Type", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.ContributionList.Time)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionListPageTable", Url = Url.Action("ContributionListManage", "Contribution", new { sortBy = "Time", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.ContributionList.SignID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionListPageTable", Url = Url.Action("ContributionListManage", "Contribution", new { sortBy = "SignID", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.ContributionList.MemberGroupID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionListPageTable", Url = Url.Action("ContributionListManage", "Contribution", new { sortBy = "MemberGroupID", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.ContributionList.CreateDateTime)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionListPageTable", Url = Url.Action("ContributionListManage", "Contribution", new { sortBy = "CreateDateTime", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.HiddenFor(m => m.PageIndex)
+        @Html.HiddenFor(m => m.PageSize)
+        @Html.HiddenFor(m => m.Keyword)
+        @Html.HiddenFor(m => m.CurrentSort)
+        @Html.HiddenFor(m => m.SortBy)
+        @Html.Hidden("IsOrderBy", false)
+        @foreach (var item in Model.ContributionListsPageLists)
+        {
+            <tr>
+                <td>
+                    <label class="lyear-checkbox checkbox-primary">
+                        <input type="checkbox" name="listid" value="@item.ContributionID "><span></span>
+                    </label>
+                </td>
+                <td>@(Model.ContributionListsPageLists.StartItemIndex + count++)</td>
+                <td><a href="@Url.Action("ContributionManage","Contribution",new { Keyword=item.ContributionID})">@item.ContributionID</a></td>
+                <td>@item.Type</td>
+                <td>@item.Time</td>
+                <td><a href="@Url.Action("SignListManage","Sign",new { keyword=item.SignID})">@item.SignID</a></td>
+                <td><a href="@Url.Action("MemberGroupListManage","MemberGroup",new { Keyword=item.MemberGroupID})">@item.MemberGroupID</a></td>
+                <td>@item.CreateDateTime</td>
+                <td>
+                    <div class="btn-group">
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetContributionList", new { ContributionID = item.ContributionID, Model.PageIndex, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "EditContributionList", OnSuccess = "GetEditModal" }, new { id = "EditLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("DelContributionList", new { ContributionID = item.ContributionID, Model.PageIndex, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "ContributionListPageTable", Confirm = "确定是否删除！", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑" })
+                        <a class="btn btn-xs btn-default" href="@Url.Action("ExportContribution","Contribution",new { item.ContributionID})" title="导出" data-toggle="tooltip"><i class="mdi mdi-file-import"></i></a>
+                        <a class="btn btn-xs btn-default" onclick="ImportFile(@item.ContributionID)" title="导入" data-toggle="tooltip"><i class="mdi mdi-file-export"></i></a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

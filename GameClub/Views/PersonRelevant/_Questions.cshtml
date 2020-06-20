@@ -1,0 +1,141 @@
+﻿@using GameClub.Models
+@model GameClub.ViewModels.QuestionViewModel
+@{
+    int count = 0;
+    int Select = 0;
+    List<FillOut> fillOuts = new List<FillOut>();
+    FillOut fillOut = new FillOut();
+}
+@Html.Hidden("QuestionaryID",Model.Questionary.QuestionaryID)
+@foreach (var item in Model.Questions)
+{
+    Select = 0;
+    fillOuts = Model.FillOuts.Where(f => f.QuestionID == item.QuestionID).ToList();
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>@(++count).@item.QuestionContext</h4>
+            </div>
+            <div class="card-body">
+                @if (item.Type)
+                {
+                    if (Model.Selects.Where(s => s.QuestionID == item.QuestionID).OrderBy(s=>s.SelectID).Count() >= 0)
+                    {
+                        foreach (var items in Model.Selects.Where(s => s.QuestionID == item.QuestionID))
+                        {
+                            fillOut = fillOuts.Where(f => f.SelectID == items.SelectID).FirstOrDefault();
+                            if (items.Type)
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-checkbox">
+                                            @if (fillOut != null)
+                                            {
+                                                <input type="checkbox"  name="@items.QuestionID@items.SelectID" checked>
+                                            }
+                                            else if (fillOuts.Count == 0 && Select == 0)
+                                            {
+                                                Select++;
+                                                <input type="checkbox"  name="@items.QuestionID@items.SelectID" checked>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox"  name="@items.QuestionID@items.SelectID" >
+                                            }
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="@(items.QuestionID)@(items.SelectID)input"  class="form-control" placeholder="其他" value="@(fillOut==null?"":fillOut.Value)"/>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-checkbox">
+                                            @if (fillOut != null)
+                                            {
+                                                <input type="checkbox" name="@items.QuestionID@items.SelectID" checked>
+                                            }
+                                            else if (fillOuts.Count == 0 && Select == 0)
+                                            {
+                                                Select++;
+                                                <input type="checkbox" name="@items.QuestionID@items.SelectID" checked>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="@items.QuestionID@items.SelectID">
+                                            }
+                                            <span>@items.Value</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                    }
+                }
+                else
+                {
+                    if (Model.Selects.Where(s => s.QuestionID == item.QuestionID).OrderBy(s => s.SelectID).Count() >= 0)
+                    {
+                        foreach (var items in Model.Selects.Where(s => s.QuestionID == item.QuestionID))
+                        {
+                            fillOut = fillOuts.Where(f => f.SelectID == items.SelectID).FirstOrDefault();
+                            if (items.Type)
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-radio">
+                                            @if (fillOut != null||Select == 0)
+                                            {
+                                                Select++;
+                                                <input type="radio" id="@items.QuestionID" name="@items.QuestionID" value="@items.SelectID" checked>
+                                            }
+                                            else
+                                            {
+                                                <input type="radio" id="@items.QuestionID" name="@items.QuestionID"value="@items.SelectID">
+                                            }
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="@(items.QuestionID)@(items.SelectID)input" class="form-control" placeholder="其他" value="@(fillOut==null?"":fillOut.Value)"/>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="form-inline">
+                                    <div class="form-group">
+                                        <label class="lyear-radio">
+                                            @if (fillOut != null|| Select == 0)
+                                            {
+                                                Select++;
+                                                <input type="radio" name="@items.QuestionID" value="@items.SelectID" checked>
+                                            }
+                                            else 
+                                            {
+                                                <input type="radio" name="@items.QuestionID" value="@items.SelectID">
+                                            }
+                                            <span>@items.Value</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            }
+
+                        }
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+    if (count % 3 == 0)
+    {
+        <div class="clearfix"></div>
+    }
+}
+

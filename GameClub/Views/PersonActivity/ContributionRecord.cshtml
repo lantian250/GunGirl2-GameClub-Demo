@@ -1,0 +1,52 @@
+﻿@using GameClub.Models
+@model IEnumerable<Contribution>
+@{
+
+    ViewBag.Title = "个人贡献历史记录";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+@section main{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>个人贡献历史记录(仅显示最近20条信息)</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>@Html.DisplayNameFor(m => m.ContributionID)</th>
+                                        <th>@Html.DisplayNameFor(m => m.AllContribution)</th>
+                                        <th>@Html.DisplayNameFor(m => m.MinSpeed)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@(++count)</td>
+                                            <td>@item.ContributionID</td>
+                                            <td>@item.AllContribution</td>
+                                            <td>@item.MinSpeed</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+}
+
+@section script{
+
+}

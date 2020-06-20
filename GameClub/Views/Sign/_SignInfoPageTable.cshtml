@@ -1,0 +1,68 @@
+﻿@model GameClub.ViewModels.SignInfoViewModel
+
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" id="check-all"><span></span>
+                </label>
+            </th>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.SignInfo.SignID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "SignInfoPageTable", Url = Url.Action("SignInfoManage", "Sign", new { sortBy = "SignID", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.SignInfo.GameID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "SignInfoPageTable", Url = Url.Action("SignInfoManage", "Sign", new { sortBy = "GameID", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.GameMember.GameName)</th>
+            <th>@Html.DisplayNameFor(m => m.SignInfo.SignCondition)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "SignInfoPageTable", Url = Url.Action("SignInfoManage", "Sign", new { sortBy = "SignCondition", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.SignInfo.SignDatetime)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "SignInfoPageTable", Url = Url.Action("SignInfoManage", "Sign", new { sortBy = "SignDatetime", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.SignInfo.VoiceCondition)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "SignInfoPageTable", Url = Url.Action("SignInfoManage", "Sign", new { sortBy = "VoiceCondition", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.SignInfo.IsLeave)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "SignInfoPageTable", Url = Url.Action("SignInfoManage", "Sign", new { sortBy = "IsLeave", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.SignInfo.Deal)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "SignInfoPageTable", Url = Url.Action("SignInfoManage", "Sign", new { sortBy = "Deal", currentSort = Model.CurrentSort, Model.PageID, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.HiddenFor(m => m.PageID)
+        @Html.HiddenFor(m => m.PageSize)
+        @Html.HiddenFor(m => m.Keyword)
+        @Html.HiddenFor(m => m.CurrentSort)
+        @Html.HiddenFor(m => m.SortBy)
+        @Html.Hidden("IsOrderBy", false)
+        @foreach (var item in Model.SignInfoPageTable)
+        {
+        <tr>
+            <td>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" name="listid" value="@item.SignID.@item.GameID "><span></span>
+                </label>
+            </td>
+            <td>@(Model.SignInfoPageTable.StartItemIndex + count++)</td>
+            <td>@item.SignID</td>
+            <td>@item.GameID</td>
+            <td>@Model.GetGameName(item.GameID)</td>
+            <td>@item.SignCondition</td>
+            @if (item.SignDatetime != null)
+            {
+                <td>@item.SignDatetime.Value.ToString("yyyy-MM-dd HH:mm")</td>
+            }
+            else
+            {
+                <td> </td>
+            }
+            <td>@item.VoiceCondition</td>
+            <td>@Model.GetIsLeaveString(item.IsLeave)</td>
+            <td>@item.Deal</td>
+            <td>
+                <div class="btn-group">
+                    @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetSignInfo", new { SignID = item.SignID, GameID = item.GameID, Model.PageID, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "EditSignInfo", OnSuccess = "GetEditModal" }, new { id = "EditLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                    @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("DelSignInfo", new { SignID = item.SignID, GameID = item.GameID, Model.PageID, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "SignInfoPageTable", Confirm = "确实是否删除！", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                    
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

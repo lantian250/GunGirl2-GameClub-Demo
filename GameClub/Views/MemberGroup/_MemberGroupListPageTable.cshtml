@@ -1,0 +1,54 @@
+﻿@model GameClub.ViewModels.MemberGroupListViewModel
+
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" id="check-all"><span></span>
+                </label>
+            </th>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroupList.MemberGroupID)<a onclick="DealInput('MemberGroupID')" id="Sort" class="pull-right"></a></th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroupList.Type)<a onclick="DealInput('Type')" id="Sort" class="pull-right"></a></th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroupList.SignID)<a onclick="DealInput('SignID')" id="Sort" class="pull-right"></a></th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroupList.ContributionID)<a onclick="DealInput('ContributionID')" id="Sort" class="pull-right"></a></th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroupList.CreateDateTime)<a onclick="DealInput('CreateDateTime')" id="Sort" class="pull-right"></a></th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.HiddenFor(m => m.PageIndex)
+        @Html.HiddenFor(m => m.PageSize)
+        @Html.HiddenFor(m => m.Keyword)
+        @Html.HiddenFor(m => m.CurrentSort)
+        @Html.HiddenFor(m => m.SortBy)
+        @Html.Hidden("IsOrderBy", false)
+        @foreach (var item in Model.MemberGroupListsPageLists)
+        {
+            <tr>
+                <td>
+                    <label class="lyear-checkbox checkbox-primary">
+                        <input type="checkbox" name="listid" value="@item.MemberGroupID "><span></span>
+                    </label>
+                </td>
+                <td>@(Model.MemberGroupListsPageLists.StartItemIndex + count++)</td>
+                <td><a href="@Url.Action("MemberGroupManage","MemberGroup",new { Keyword=item.MemberGroupID})">@item.MemberGroupID</a></td>
+                <td>@item.Type</td>
+                <td><a href="@Url.Action("SignListManage","Sign",new { keyword=item.SignID})">@item.SignID</a></td>
+                <td><a href="@Url.Action("ContributionListManage","Contribution",new { Keyword=item.ContributionID})">@item.ContributionID</a></td>
+                <td>@item.CreateDateTime</td>
+                <td>
+                    <div class="btn-group">
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetMemberGroupList", new { MemberGroupID = item.MemberGroupID, Model.PageIndex, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "EditMemberGroupList", OnSuccess = "GetEditModal" }, new { id = "EditLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("DelMemberGroupList", new { MemberGroupID = item.MemberGroupID, Model.PageIndex, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "MemberGroupListPageTable", Confirm = "确定是否删除！", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

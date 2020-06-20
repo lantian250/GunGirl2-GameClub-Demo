@@ -1,0 +1,50 @@
+﻿@model GameClub.ViewModels.MemberGroupViewModel
+
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" id="check-all"><span></span>
+                </label>
+            </th>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroup.MemberGroupID)<a onclick="DealInput('MemberGroupID')" id="SortBy" class="pull-right"></a> </th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroup.GameID)<a onclick="DealInput('GameID')" id="SortBy" class="pull-right"></a></th>
+            <th>@Html.DisplayNameFor(m => m.MemberGroup.GroupName)<a onclick="DealInput('GroupName')" id="SortBy" class="pull-right"></a></th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.HiddenFor(m => m.PageIndex)
+        @Html.HiddenFor(m => m.PageSize)
+        @Html.HiddenFor(m => m.Keyword)
+        @Html.HiddenFor(m => m.CurrentSort)
+        @Html.HiddenFor(m => m.SortBy)
+        @Html.Hidden("IsOrderBy", false)
+        @foreach (var item in Model.MemberGroupsPageLists)
+        {
+            <tr>
+                <td>
+                    <label class="lyear-checkbox checkbox-primary">
+                        <input type="checkbox" name="listid" value="@item.MemberGroupID.@item.GameID "><span></span>
+                    </label>
+                </td>
+                <td>@(Model.MemberGroupsPageLists.StartItemIndex + count++)</td>
+                <td>@item.MemberGroupID</td>
+                <td>@item.GameID</td>
+                <td>@item.GroupName</td>
+                <td>
+                    <div class="btn-group">
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetMemberGroup", new { MemberGroupID = item.MemberGroupID, GameID = item.GameID, Model.PageIndex, Model.PageSize, Model.Keyword }), UpdateTargetId = "EditMemberGroupInfo", OnSuccess = "GetEditModal" }, new { id = "EditLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑" })
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("DelMemberGroup", new { MemberGroupID = item.MemberGroupID, GameID = item.GameID, Model.PageIndex, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "MemberGroupInfoPageTable", Confirm = "确定是否删除！", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

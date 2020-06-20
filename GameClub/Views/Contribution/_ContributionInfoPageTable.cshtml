@@ -1,0 +1,54 @@
+﻿@model GameClub.ViewModels.ContributionViewModel
+
+@{
+    int count = 0;
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                <label class="lyear-checkbox checkbox-primary">
+                    <input type="checkbox" id="check-all"><span></span>
+                </label>
+            </th>
+            <th>编号</th>
+            <th>@Html.DisplayNameFor(m => m.Contribution.ContributionID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionInfoPageTable", Url = Url.Action("ContributionManage", "Contribution", new { sortBy = "ContributionID", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.Contribution.GameID)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionInfoPageTable", Url = Url.Action("ContributionManage", "Contribution", new { sortBy = "GameID", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.GameMember.GameName)</th>
+            <th>@Html.DisplayNameFor(m => m.Contribution.AllContribution)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionInfoPageTable", Url = Url.Action("ContributionManage", "Contribution", new { sortBy = "AllContribution", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>@Html.DisplayNameFor(m => m.Contribution.MinSpeed)@Ajax.ActionLink(" ", null, null, new AjaxOptions { OnSuccess = "DealInput", UpdateTargetId = "ContributionInfoPageTable", Url = Url.Action("ContributionManage", "Contribution", new { sortBy = "MinSpeed", currentSort = Model.CurrentSort, Model.PageIndex, Model.PageSize, Model.Keyword, IsOrderBy = true }) }, new { id = "Sort", @class = "pull-right" })</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.HiddenFor(m => m.PageIndex)
+        @Html.HiddenFor(m => m.PageSize)
+        @Html.HiddenFor(m => m.Keyword)
+        @Html.HiddenFor(m => m.CurrentSort)
+        @Html.HiddenFor(m => m.SortBy)
+        @Html.Hidden("IsOrderBy", false)
+        @foreach (var item in Model.ContributionsPageLists)
+        {
+            <tr>
+                <td>
+                    <label class="lyear-checkbox checkbox-primary">
+                        <input type="checkbox" name="listid" value="@item.ContributionID.@item.GameID "><span></span>
+                    </label>
+                </td>
+                <td>@(Model.ContributionsPageLists.StartItemIndex + count++)</td>
+                <td>@item.ContributionID</td>
+                <td>@item.GameID</td>
+                <td>@Model.GetGameName(item.GameID)</td>
+                <td>@item.AllContribution</td>
+                <td>@item.MinSpeed</td>
+                <td>
+                    <div class="btn-group">
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("GetContributionInfo", new { ContributionID = item.ContributionID, GameID = item.GameID, Model.PageIndex, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "EditContributionInfo", OnSuccess = "GetEditModal" }, new { id = "EditLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                        @Ajax.ActionLink(" ", null, null, new AjaxOptions { Url = Url.Action("DelContributionInfo", new { ContributionID = item.ContributionID, GameID = item.GameID, Model.PageIndex, Model.PageSize, Model.Keyword, Model.CurrentSort, Model.SortBy, IsOrderBy = false }), UpdateTargetId = "ContributionInfoPageTable", Confirm = "确定是否删除！", OnBegin = "OnBegin", OnSuccess = "OnDelSuccess", OnFailure = "OnDelFailure" }, new { id = "DelLink", type = "button", @class = "btn btn-xs btn-default", title = "编辑"})
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
